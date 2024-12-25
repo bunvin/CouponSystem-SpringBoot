@@ -1,0 +1,13 @@
+CompanyServiceImp >> UpdateCompany
+q: Is it necessary to pull the full User from DB by ID?
+could be important for validation
+
+
+Company >> User
+q: User should be ManyToOne? (like product?), no need for it to be pulled with every company
+
+Company >> Name 
+q: updatable?
+
+Company >> Email 
+q: updatable?

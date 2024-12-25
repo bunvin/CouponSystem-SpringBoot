@@ -25,6 +25,7 @@ public class UserServiceImp implements UserService{
         user.setId(userFromDb.getId());
         this.userRepository.save(user);
     }
+    
     @Override
     public void deleteUser(int userId) throws Exception {
         if(this.userRepository.existsById(userId)){
