@@ -32,5 +32,10 @@ public class Company {
     String name;
 
     String userEmail = this.getUser().getEmail();
+    @Builder.Default
+    private LocalDateTime createdDateTime = LocalDateTime.now();
+    @Builder.Default
+    @Setter(AccessLevel.NONE)
+    private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
 }

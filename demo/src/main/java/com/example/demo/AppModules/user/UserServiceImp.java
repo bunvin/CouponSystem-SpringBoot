@@ -16,6 +16,7 @@ public class UserServiceImp implements UserService{
          User newUser = this.userRepository.save(user);
          return newUser;
     }
+    
     @Override
     public void updateUser(User user, int userId) throws Exception {
         User userFromDb = this.getSingleUser(userId);
