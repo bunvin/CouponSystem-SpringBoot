@@ -3,9 +3,7 @@ package com.example.demo.AppModules.company;
 
 import com.example.demo.Error.ErrorMessage;
 
-import lombok.Getter;
 
-@Getter
 public enum CompanyError implements ErrorMessage{
     
     COMPANY_NOT_FOUND(2001, "Company not found"),
@@ -19,5 +17,15 @@ public enum CompanyError implements ErrorMessage{
     CompanyError(int code, String message) {
         this.code = code;
         this.message = message;
+    }
+
+    @Override
+    public int getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

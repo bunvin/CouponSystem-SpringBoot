@@ -4,25 +4,23 @@ package com.example.demo.AppModules.company;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class CompanyServiceImp implements CompanyService {
-    private final CompanyRepository companyRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Override
     public Company addCompany(Company company) throws AppException {
         //company name and email should be unique
-        if(this.companyRepository.existsByName(company.getName()) == true){
+        if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByUserEmail(company.getUserEmail()) == true){
+        if(this.companyRepository.existsByOwnerEmail(company.getOwnerEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
         Company newCompany = this.companyRepository.save(company);
@@ -31,19 +29,16 @@ public class CompanyServiceImp implements CompanyService {
 
     @Override
     public void updateCompany(Company company, int companyId) throws AppException {
+        Company dbCompany = getSingleCompany(companyId);
         //company name and email should be unique
-        if(this.companyRepository.existsById(companyId) == false){
-            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
-        }
         if(this.companyRepository.existsByName(company.getName()) == true){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByUserEmail(company.getUserEmail()) == true){
+        if(this.companyRepository.existsByOwnerEmail(company.getOwnerEmail()) == true){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
-        User user = company.getUser();
-        company.setUser(user); //needed?
-        company.setId(companyId);
+        company.setUser(dbCompany.getOwner()); //needed?
+        company.setId(dbCompany.getId());
 
         this.companyRepository.save(company);
 
@@ -51,11 +46,7 @@ public class CompanyServiceImp implements CompanyService {
 
     @Override
     public void deleteCompany(int companyId) throws AppException {
-        // only if Company exist
-        Company company = this.companyRepository.findById(companyId).orElse(null);
-        if(company == null){
-            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
-        }
+        Company company = getSingleCompany(companyId);
         // get all coupons
         // delete all purchases 
         //selete all coupons
@@ -64,28 +55,20 @@ public class CompanyServiceImp implements CompanyService {
     }
 
     @Override
-    public boolean companyExists(int companyId) {
-        return this.companyRepository.existsById(companyId);
+    public Company getSingleCompany(int companyId) throws AppException {
+        return this.companyRepository.findById(companyId)
+                        .orElseThrow(() -> new AppException(CompanyError.COMPANY_NOT_FOUND));
     }
 
     @Override
-    public Company getSingleCompany(int companyId) throws AppException {
-        Company company = this.companyRepository.findById(companyId).orElse(null);
+    public Company getSingleCompanyByName(String companyName) throws AppException {
+        Company company = this.companyRepository.findByName(companyName);
         if(company == null){
             throw new AppException(CompanyError.COMPANY_NOT_FOUND);
         }
         return company;
     }
 
-    @Override
-    public Company getSingleCompany(String companyName) throws AppException {
-        Company company = this.companyRepository.findByName(companyName);
-        if(company == null){
-            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
-        }
-        return company;    
-    }
-    
 
     @Override
     public List<Company> getCompanyList() {
@@ -94,7 +77,7 @@ public class CompanyServiceImp implements CompanyService {
 
     @Override
     public boolean isCompanyNameOrEmailExists(String companyName, String email) {
-        boolean nameOrEmailExist = this.companyRepository.existsByName(companyName) || this.companyRepository.existsByUserEmail(email);
+        boolean nameOrEmailExist = this.companyRepository.existsByName(companyName) || this.companyRepository.existsByOwnerEmail(email);
         return nameOrEmailExist;
     }
 }

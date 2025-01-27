@@ -3,13 +3,6 @@ package com.example.demo.AppModules.user;
 
 import com.example.demo.Error.ErrorMessage;
 
-import lombok.Getter;
-
-/**
- * Enum for User Error
- */
-
-@Getter
 public enum UserError implements ErrorMessage{
     
     USER_NOT_FOUND(1001, "User not found"),
@@ -23,4 +16,13 @@ public enum UserError implements ErrorMessage{
         this.message = message;
     }
 
+    @Override
+    public int getCode() {
+        return code;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
+    }
 }

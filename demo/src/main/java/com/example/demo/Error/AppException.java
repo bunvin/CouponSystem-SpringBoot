@@ -1,9 +1,6 @@
 
 package com.example.demo.Error;
 
-import lombok.Getter;
-
-@Getter
 public class AppException extends Exception{
     private final ErrorMessage errorMessage;
 
@@ -11,5 +8,10 @@ public class AppException extends Exception{
         super(errorMessage.getMessage());
         this.errorMessage = errorMessage;
     }
-    
+
+    public ErrorMessage getErrorMessage() {
+        return errorMessage;
+    }
+
+
 }
