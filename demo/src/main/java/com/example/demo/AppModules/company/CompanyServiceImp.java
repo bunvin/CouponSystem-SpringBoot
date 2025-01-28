@@ -20,7 +20,7 @@ public class CompanyServiceImp implements CompanyService {
         if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByOwnerEmail(company.getOwnerEmail())){
+        if(this.companyRepository.existsByUserEmail(company.getUserEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
         Company newCompany = this.companyRepository.save(company);
@@ -31,13 +31,13 @@ public class CompanyServiceImp implements CompanyService {
     public void updateCompany(Company company, int companyId) throws AppException {
         Company dbCompany = getSingleCompany(companyId);
         //company name and email should be unique
-        if(this.companyRepository.existsByName(company.getName()) == true){
+        if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByOwnerEmail(company.getOwnerEmail()) == true){
+        if(this.companyRepository.existsByUserEmail(company.getUserEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
-        company.setUser(dbCompany.getOwner()); //needed?
+        company.setCompanyUser(dbCompany.getCompanyUser()); //needed?
         company.setId(dbCompany.getId());
 
         this.companyRepository.save(company);
@@ -77,7 +77,7 @@ public class CompanyServiceImp implements CompanyService {
 
     @Override
     public boolean isCompanyNameOrEmailExists(String companyName, String email) {
-        boolean nameOrEmailExist = this.companyRepository.existsByName(companyName) || this.companyRepository.existsByOwnerEmail(email);
+        boolean nameOrEmailExist = this.companyRepository.existsByName(companyName) || this.companyRepository.existsByUserEmail(email);
         return nameOrEmailExist;
     }
 }

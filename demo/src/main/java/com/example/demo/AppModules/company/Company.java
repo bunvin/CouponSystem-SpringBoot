@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import com.example.demo.AppModules.user.User;
 
 @Entity
-public class Company  implements Serializable  {
+public class Company implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,25 +20,39 @@ public class Company  implements Serializable  {
     String name;
 
     @Column(updatable = false)
-    private User owner;
-    //both PostLocat
-    private String ownerEmail;
-    private String ownerPassword;
+    private User user;
+    //both with @ PostLocat after user is created
+    private String userEmail;
+    private String userPassword;
 
+    //no setter no builder default always
+    @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
-
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
-    //constractor
+    //Constractor
     public Company() {
     }
 
-    public Company(int id, String name, User owner, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public Company(int id, String name, User user) {
         this.id = id;
         this.name = name;
-        this.owner = owner;
-        this.createdDateTime = createdDateTime;
-        this.modifiedDateTime = modifiedDateTime;
+        this.user = user;
+    }
+
+    //After entity with user is loaded, save user and password
+    @PostLoad
+    public void postLoad() {
+        if (user != null) {
+            this.userEmail = user.getEmail();
+            this.userPassword = user.getPassword();
+        }
+    }
+
+    //before every update threw repo
+    @PreUpdate
+    public void updateModifiedDateTime() {
+        this.modifiedDateTime = LocalDateTime.now();
     }
 
     //builder
@@ -47,10 +61,9 @@ public class Company  implements Serializable  {
     }
 
     public static class CompanyBuilder {
-
         private int id;
         private String name;
-        private User owner;
+        private User user;
         private LocalDateTime createdDateTime = LocalDateTime.now(); // default value
         private LocalDateTime modifiedDateTime = LocalDateTime.now(); // default value
 
@@ -64,27 +77,27 @@ public class Company  implements Serializable  {
             return this;
         }
 
-        public CompanyBuilder user(User owner) {
-            this.owner = owner;
+        public CompanyBuilder user(User user) {
+            this.user = user;
             return this;
         }
 
-
         public Company build() {
-            return new Company(id, name, owner, createdDateTime, modifiedDateTime);
+            return new Company(id, name, user);
         }
     }
 
-
     //getter setter
-
-
-    public String getOwnerEmail() {
-        return ownerEmail;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getOwnerPassword() {
-        return ownerPassword;
+    public void setCompanyUser(User user) {
+        this.user = user;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getId() {
@@ -95,8 +108,16 @@ public class Company  implements Serializable  {
         return name;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getCompanyUser() {
+        return user;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public String getUserPassword() {
+        return userPassword;
     }
 
     public LocalDateTime getCreatedDateTime() {
@@ -107,31 +128,14 @@ public class Company  implements Serializable  {
         return modifiedDateTime;
     }
 
-    public void setUser(User owner) {
-        this.owner = owner;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "Company{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", user=" + owner +
-                ", createdDateTime=" + createdDateTime +
-                ", modifiedDateTime=" + modifiedDateTime +
+                ", user=" + user +
                 '}';
     }
 
-    @PostLoad
-    public void postLoad() {
-        // Initialize ownerEmail and ownerPassword after entity is loaded
-        if (owner != null) {
-            this.ownerEmail = owner.getEmail();
-            this.ownerPassword = owner.getPassword();
-        }
-    }
+
 }

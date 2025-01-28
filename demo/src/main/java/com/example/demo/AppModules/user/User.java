@@ -3,19 +3,9 @@ package com.example.demo.AppModules.user;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +18,26 @@ public class User implements Serializable {
 
     @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
-    
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
+    //constractors
+    public User() {
+    }
+
+    public User(int id, String email, String password, UserType userType, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = modifiedDateTime;
+    }
+
+    //before every update
+    @PreUpdate
+    public void updateModifiedDateTime() {
+        this.modifiedDateTime = LocalDateTime.now();
+    }
     //builder
     public static UserBuilder builder() {
         return new UserBuilder();
@@ -69,7 +76,7 @@ public class User implements Serializable {
             user.id = this.id;
             user.email = this.email;
             user.password = this.password;
-//            user.userType = this.userType;
+            user.userType = this.userType;
             return user;
         }
     }
@@ -87,9 +94,9 @@ public class User implements Serializable {
         this.password = password;
     }
 
-//    public void setUserType(UserType userType) {
-//        this.userType = userType;
-//    }
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
 
     public int getId() {
         return id;
@@ -103,10 +110,6 @@ public class User implements Serializable {
         return password;
     }
 
-//    public UserType getUserType() {
-//        return userType;
-//    }
-
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }
@@ -115,5 +118,13 @@ public class User implements Serializable {
         return modifiedDateTime;
     }
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", userType=" + userType +
+                '}';
+    }
 }
