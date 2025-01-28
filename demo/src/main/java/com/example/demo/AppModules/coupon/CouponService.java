@@ -1,0 +1,23 @@
+package com.example.demo.AppModules.coupon;
+
+import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
+import com.example.demo.Error.AppException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface CouponService {
+    Coupon addCoupon(Coupon coupon) throws AppException;
+    void updateCoupon(Coupon coupon, int couponId) throws AppException;
+    void deleteCoupon(int couponId) throws AppException;
+    Coupon getSingleCoupon(int couponId) throws AppException;
+    List<Coupon> getAllCoupons();
+    CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException;
+    void deleteCouponPurchase(int customerId, int couponId) throws AppException;
+
+
+
+
+}

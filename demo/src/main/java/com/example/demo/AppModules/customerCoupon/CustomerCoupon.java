@@ -2,20 +2,21 @@ package com.example.demo.AppModules.customerCoupon;
 
 import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.coupon.Coupon;
+import com.example.demo.AppModules.customer.Customer;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class customerCoupon {
+public class CustomerCoupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)//delete purchase with company
-    @JoinColumn(name="companyId")
-    Company company;
+    @ManyToOne(cascade = CascadeType.ALL)//delete purchase with customer
+    @JoinColumn(name="customerId")
+    Customer customer;
 
     @ManyToOne(cascade = CascadeType.ALL)//delete purchase with coupon
     @JoinColumn(name= "couponId")
@@ -27,13 +28,15 @@ public class customerCoupon {
 
 
     //constractor
-    public customerCoupon() {
+    public CustomerCoupon() {
     }
 
-    public customerCoupon(int id, Company company, Coupon coupon) {
+    public CustomerCoupon(int id, Customer customer, Coupon coupon, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.id = id;
-        this.company = company;
+        this.customer = customer;
         this.coupon = coupon;
+        this.createdDateTime = createdDateTime;
+        this.modifiedDateTime = modifiedDateTime;
     }
 
     //before every update threw repo
@@ -53,12 +56,12 @@ public class customerCoupon {
         this.id = id;
     }
 
-    public Company getCompany() {
-        return company;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Coupon getCoupon() {
@@ -87,10 +90,10 @@ public class customerCoupon {
 
     @Override
     public String toString() {
-        return "customerCoupon{" +
+        return "CustomerCoupon{" +
                 "id=" + id +
-                ", company=" + company +
-                ", coupon=" + coupon +
+                ", customer=" + customer.getId() +
+                ", coupon=" + coupon.getId() +
                 '}';
     }
 }

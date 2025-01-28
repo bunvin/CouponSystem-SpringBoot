@@ -47,10 +47,6 @@ public class CompanyServiceImp implements CompanyService {
     @Override
     public void deleteCompany(int companyId) throws AppException {
         Company company = getSingleCompany(companyId);
-        // get all coupons
-        // delete all purchases 
-        //selete all coupons
-        // delete company
         this.companyRepository.deleteById(companyId);
     }
 

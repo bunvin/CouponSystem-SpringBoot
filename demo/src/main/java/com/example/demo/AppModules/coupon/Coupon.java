@@ -12,7 +12,7 @@ public class Coupon {
     @Column(updatable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)//delete coupon with company
     @JoinColumn(name="companyId")
     private Company company;
 
