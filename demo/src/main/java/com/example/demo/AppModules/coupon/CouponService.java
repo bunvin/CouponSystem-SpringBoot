@@ -17,6 +17,9 @@ public interface CouponService {
     List<Coupon> getAllCoupons();
     List<Coupon> getAllCouponsByCompanyId(int companyId) throws AppException;
     List<Coupon> getAllCouponsByCustomerId(int customerId) throws AppException;
+    List<Coupon> getAllCouponsByCustomerIdAndMaxPrice(int customerId, double maxPrice);
+    List<Coupon> getAllCouponsByCategory(Category category) throws AppException;
+    List<Coupon> getAllCouponsByCustomerIdAndCategory(int customerId, Category category) throws AppException;
 
     //CustomerCoupon
     CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException;

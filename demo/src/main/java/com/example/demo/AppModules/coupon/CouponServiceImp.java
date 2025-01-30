@@ -6,11 +6,11 @@ import com.example.demo.AppModules.customer.CustomerServiceImp;
 import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.customerCoupon.CustomerCouponService;
 import com.example.demo.Error.AppException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +24,7 @@ public class CouponServiceImp implements CouponService{
     @Autowired
     private CustomerCouponService customerCouponService;
 
+    @Transactional
     @Override
     public Coupon addCoupon(Coupon coupon) throws AppException {
         //not same title in company
@@ -73,16 +74,35 @@ public class CouponServiceImp implements CouponService{
 
     @Override
     public List<Coupon> getAllCouponsByCustomerId(int customerId) throws AppException {
-        List<Coupon> customerCoupons = new ArrayList<>();
-        //get all CustomerCoupon's purchases
         List<CustomerCoupon> purchasedList = this.customerCouponService.getAllByCustomerId(customerId);
-        for(CustomerCoupon purchase: purchasedList ){
-            customerCoupons.add(purchase.getCoupon());
-        }
-        return customerCoupons;
+        return purchasedList.stream()
+                .map(CustomerCoupon::getCoupon)
+                .toList();
     }
 
+    @Override
+    public List<Coupon> getAllCouponsByCustomerIdAndMaxPrice(int customerId, double maxPrice) {
+        List<CustomerCoupon> purchasedList = this.customerCouponService.getAllByCustomerId(customerId);
+        return purchasedList.stream()
+                .map(CustomerCoupon::getCoupon)
+                .filter(coupon -> coupon.getPrice() <= maxPrice)
+                .toList();
+    }
 
+    @Override
+    public List<Coupon> getAllCouponsByCategory(Category category) throws AppException {
+        return this.couponRepository.findAllByCategory(category);
+    }
+
+    @Override
+    public List<Coupon> getAllCouponsByCustomerIdAndCategory(int customerId, Category category) throws AppException {
+        List<Coupon> customerCoupons = this.getAllCouponsByCustomerId(customerId);
+        return customerCoupons.stream()
+                .filter(coupon -> coupon.getCategory() == category)
+                .toList();
+    }
+
+    @Transactional
     @Override
     public CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException {
         Coupon coupon = this.getSingleCoupon(couponId);
