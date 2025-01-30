@@ -17,7 +17,7 @@ public class CustomerServiceImp implements CustomerService{
         if(this.customerRepository.existsById(customer.getId())){
             throw new AppException(CustomerError.CUSTOMER_ALREADY_EXIST);
         }
-        if(this.customerRepository.existsByEmail(customer.getUserEmail())){
+        if(this.customerRepository.existsByUserEmail(customer.getUserEmail())){
             throw new AppException(CustomerError.CUSTOMER_EMAIL_IN_USE);
         }
         return this.customerRepository.save(customer);
@@ -57,11 +57,11 @@ public class CustomerServiceImp implements CustomerService{
     }
     @Override
     public boolean isCustomerEmailExist(String email) {
-        return this.customerRepository.existsByEmail(email);
+        return this.customerRepository.existsByUserEmail(email);
     }
 
     @Override
     public boolean isCustomerPasswordExist(String password) {
-        return this.customerRepository.existsByPassword(password);
+        return this.customerRepository.existsByUserPassword(password);
     }
 }

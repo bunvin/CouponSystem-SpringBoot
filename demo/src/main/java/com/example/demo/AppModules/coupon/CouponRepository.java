@@ -7,7 +7,6 @@ import java.util.List;
 
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Integer> {
-    boolean existsByCouponTitleAndCompanyId(String couponName, int companyId);
-
+    boolean existsByTitleAndCompanyId(String couponName, int companyId);
     List<Coupon> findAllByCompanyId(int companyID);
 }

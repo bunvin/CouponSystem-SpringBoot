@@ -2,7 +2,6 @@ package com.example.demo.AppModules.customerCoupon;
 
 import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.customer.Customer;
-import com.example.demo.AppModules.customer.CustomerService;
 import com.example.demo.Error.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,7 @@ public class CustomerCouponService {
     private CustomerCouponRepository customerCouponRepository;
 
     public CustomerCoupon addPurchase(Customer customer, Coupon coupon) throws AppException {
-        if(this.customerCouponRepository.existByCustomerIdAndCouponId(
+        if(this.customerCouponRepository.existsByCustomerIdAndCouponId(
                 customer.getId(), coupon.getId())){
             throw new AppException(CustomerCouponError.CUSTOMER_COUPON_ALREADY_EXIST);
         }
@@ -39,6 +38,10 @@ public class CustomerCouponService {
 
     public List<CustomerCoupon> getAllByCouponId(int couponId){
         return this.customerCouponRepository.findAllByCouponId(couponId);
+    }
+
+    public boolean existPurchase(int customerId, int couponId){
+        return this.customerCouponRepository.existsByCustomerIdAndCouponId(customerId,couponId);
     }
 
 
