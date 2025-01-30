@@ -65,9 +65,8 @@ public class CompanyServiceImp implements CompanyService {
         return company;
     }
 
-
     @Override
-    public List<Company> getCompanyList() {
+    public List<Company> getAllCompanies() {
         return this.companyRepository.findAll();
     }
 

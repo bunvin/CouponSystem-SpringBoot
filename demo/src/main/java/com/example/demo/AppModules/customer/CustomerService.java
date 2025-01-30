@@ -14,7 +14,7 @@ public interface CustomerService {
     Customer getSingleCustomer(int customerID) throws AppException;
     List<Customer> getAllCustomer();
 
-    boolean isCustomerExist(User user) throws AppException;
-    boolean isCustomerEmailExist(String email) throws AppException;
-    boolean isCustomerPasswordExist(String password) throws AppException;
+    boolean isCustomerExist(User user);
+    boolean isCustomerEmailExist(String email);
+    boolean isCustomerPasswordExist(String password);
 }

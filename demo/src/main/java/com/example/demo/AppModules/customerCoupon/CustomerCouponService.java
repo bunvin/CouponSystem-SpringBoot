@@ -13,7 +13,8 @@ import java.util.List;
 public class CustomerCouponService {
     @Autowired
     private CustomerCouponRepository customerCouponRepository;
-    CustomerCoupon addPurchase(Customer customer, Coupon coupon) throws AppException {
+
+    public CustomerCoupon addPurchase(Customer customer, Coupon coupon) throws AppException {
         if(this.customerCouponRepository.existByCustomerIdAndCouponId(
                 customer.getId(), coupon.getId())){
             throw new AppException(CustomerCouponError.CUSTOMER_COUPON_ALREADY_EXIST);
@@ -24,7 +25,7 @@ public class CustomerCouponService {
         return this.customerCouponRepository.save(newPurchase);
     };
 
-    void deletePurchase(int customerId, int couponId) throws AppException {
+    public void deletePurchase(int customerId, int couponId) throws AppException {
         CustomerCoupon purchaseToDelete = this.customerCouponRepository.findByCustomerIdAndCouponId(customerId, couponId);
         if(purchaseToDelete == null){
             throw new AppException(CustomerCouponError.CUSTOMER_COUPON_NOT_FOUND);
@@ -32,11 +33,11 @@ public class CustomerCouponService {
         this.customerCouponRepository.deleteById(purchaseToDelete.getId());
     };
 
-    List<CustomerCoupon> getAllByCustomerId(int customerId){
+    public List<CustomerCoupon> getAllByCustomerId(int customerId){
         return this.customerCouponRepository.findAllByCustomerId(customerId);
     }
 
-    List<CustomerCoupon> getAllByCouponId(int couponId){
+    public List<CustomerCoupon> getAllByCouponId(int couponId){
         return this.customerCouponRepository.findAllByCouponId(couponId);
     }
 

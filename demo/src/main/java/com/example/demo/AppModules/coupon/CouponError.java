@@ -6,7 +6,8 @@ public enum CouponError implements ErrorMessage {
     COUPON_NOT_FOUND(3001, "Coupon not found"),
     COUPON_ALREADY_EXIST(3002, "Coupon already exist"),
     COUPON_NAME_TAKEN(3003, "Coupon name already in use by company"),
-    COUPON_AMOUNT_FINISHED(3004, "No coupons left to purchase");
+    COUPON_AMOUNT_FINISHED(3004, "No coupons left to purchase"),
+    COUPON_COMPANY_UNUPDATABLE(3005, "Coupon's company can't be updated");
 
     private final int code;
     private final String message;

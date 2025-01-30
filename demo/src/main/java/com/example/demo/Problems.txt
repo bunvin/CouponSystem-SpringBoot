@@ -1,13 +1,6 @@
-CompanyServiceImp >> UpdateCompany
-q: Is it necessary to pull the full User from DB by ID?
-could be important for validation
+CompanyServiceImp
+look at it maybe have some changes, older code
 
-
-Company >> User
-q: User should be ManyToOne? (like product?), no need for it to be pulled with every company
-
-Company >> Name 
-q: updatable?
-
-Company >> Email 
-q: updatable?
+CouponServiceImp >> update coupon
+in bean updatable = false in fields: id, company
+should update check and throw exception?

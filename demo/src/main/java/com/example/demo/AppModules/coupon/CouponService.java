@@ -13,7 +13,11 @@ public interface CouponService {
     void updateCoupon(Coupon coupon, int couponId) throws AppException;
     void deleteCoupon(int couponId) throws AppException;
     Coupon getSingleCoupon(int couponId) throws AppException;
+
     List<Coupon> getAllCoupons();
+    List<Coupon> getAllCouponsByCompanyId(int CompanyID) throws AppException;
+
+    //CustomerCoupon
     CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException;
     void deleteCouponPurchase(int customerId, int couponId) throws AppException;
 

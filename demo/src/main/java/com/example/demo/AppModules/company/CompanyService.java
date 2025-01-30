@@ -15,7 +15,8 @@ public interface CompanyService {
     void deleteCompany(int companyId) throws AppException;
     Company getSingleCompany(int companyId) throws AppException;
     Company getSingleCompanyByName(String companyName) throws AppException;
-    List<Company> getCompanyList();
+    List<Company> getAllCompanies();
+
     boolean isCompanyNameOrEmailExists(String companyName, String email);
 
 }

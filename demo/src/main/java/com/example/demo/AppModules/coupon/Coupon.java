@@ -13,7 +13,7 @@ public class Coupon {
     private int id;
 
     @ManyToOne(cascade = CascadeType.ALL)//delete coupon with company
-    @JoinColumn(name="companyId")
+    @JoinColumn(name="companyId", updatable = false)
     private Company company;
 
     @Enumerated(EnumType.STRING)
