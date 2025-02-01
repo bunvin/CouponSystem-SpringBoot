@@ -4,6 +4,7 @@ import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +14,9 @@ public class AdminFacade extends ClientFacade{
 
     private User userLogin;
 
-    public AdminFacade(User user) {
+    @Autowired
+    public AdminFacade() throws AppException {
         super();
-        this.userLogin = user;
     }
 
     public Company addCompany(Company company) throws AppException {

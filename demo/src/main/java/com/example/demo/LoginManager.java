@@ -13,10 +13,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginManager {
     private final UserServiceImp userServiceImp;
+    private final AdminFacade adminFacade;
+    private final CompanyFacade companyFacade;
+    private final CustomerFacade customerFacade;
 
+    //init threw constructor to avoid using New
     @Autowired
-    public LoginManager(UserServiceImp userServiceImp) {
+    public LoginManager(UserServiceImp userServiceImp, AdminFacade adminFacade, CompanyFacade companyFacade, CustomerFacade customerFacade) {
         this.userServiceImp = userServiceImp;
+        this.adminFacade = adminFacade;
+        this.companyFacade = companyFacade;
+        this.customerFacade = customerFacade;
     }
 
     public ClientFacade login(String email, String password) throws AppException {
@@ -24,13 +31,13 @@ public class LoginManager {
         if(user != null){
             switch(user.getUserType()){
                 case ADMIN:
-                    AdminFacade adminFacade = new AdminFacade(user);
+                    adminFacade.setUserLogin(user);
                     return adminFacade;
                 case COMPANY:
-                    CompanyFacade companyFacade = new CompanyFacade(user);
+                    companyFacade.setUserLogin(user);
                     return companyFacade;
                 case CUSTOMER:
-                    CustomerFacade customerFacade = new CustomerFacade(user);
+                    customerFacade.setUserLogin(user);
                     return customerFacade;
                 }
             } return null;

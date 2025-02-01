@@ -7,6 +7,7 @@ import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.coupon.CouponServiceImp;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,15 @@ import java.util.List;
 
 @Service
 public class CompanyFacade extends ClientFacade{
-    @Autowired
-    private CouponServiceImp couponServiceImp;
-    @Autowired
-    private CompanyServiceImp companyServiceImp;
 
     private User userLogin;
-    private final Company company;
+    private Company company;
 
-    public CompanyFacade(User user) throws AppException {super();
-        this.userLogin = user;
-        this.company = this.companyServiceImp.getCompanyByUserId(userLogin.getId());
+    @PostConstruct
+    public void initCompany() throws AppException {
+        if(this.userLogin != null){
+            this.company = getCompanyServiceImp().getCompanyByUserId(userLogin.getId());
+        }
     }
 
     public User getUserLogin() {
@@ -36,23 +35,23 @@ public class CompanyFacade extends ClientFacade{
     }
 
     public Coupon addCoupon(Coupon coupon) throws AppException{
-        return this.couponServiceImp.addCoupon(coupon);
+        return getCouponServiceImp().addCoupon(coupon);
     }
 
     public void updateCoupon(Coupon coupon, int couponId) throws AppException {
-        this.couponServiceImp.updateCoupon(coupon,couponId);
+        getCouponServiceImp().updateCoupon(coupon,couponId);
     }
 
     public void deleteCoupon(int couponId) throws AppException{
-        this.couponServiceImp.deleteCoupon(couponId);
+        getCouponServiceImp().deleteCoupon(couponId);
     }
 
     public List<Coupon> getAllCompanyCoupons() throws AppException {
-        return this.couponServiceImp.getAllCouponsByCompanyId(company.getId());
+        return getCouponServiceImp().getAllCouponsByCompanyId(company.getId());
     }
 
     public List<Coupon> getAllCompanyCouponsByCategory(Category category){
-        return this.couponServiceImp.getAllCouponsByCompanyIdAndCategory(company.getId(), category);
+        return getCouponServiceImp().getAllCouponsByCompanyIdAndCategory(company.getId(), category);
     }
 
     public List<Coupon> getAllCompanyCouponsUpToMaxPrice(double maxPrice) throws AppException {

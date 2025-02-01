@@ -8,6 +8,7 @@ import com.example.demo.AppModules.customer.CustomerServiceImp;
 import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +16,18 @@ import java.util.List;
 
 @Service
 public class CustomerFacade extends ClientFacade{
-    @Autowired
-    private CustomerServiceImp customerServiceImp;
-    @Autowired
-    private CouponServiceImp couponServiceImp;
 
     private User userLogin;
-    private final Customer customer;
+    private Customer customer;
 
-    public CustomerFacade(User user) {super();
-        this.userLogin = user;
-        this.customer = this.customerServiceImp.getCustomerByUserId(userLogin.getId());
+    public CustomerFacade() throws AppException {super();
+    }
+
+    @PostConstruct
+    public void initCustomer(){
+        if(this.userLogin != null){
+            this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
+        }
     }
 
     public User getUserLogin() {
@@ -37,19 +39,19 @@ public class CustomerFacade extends ClientFacade{
     }
 
     public CustomerCoupon addCouponPurchases(int couponId) throws AppException {
-        return this.couponServiceImp.addCouponPurchase(customer.getId(), couponId);
+        return getCouponServiceImp().addCouponPurchase(customer.getId(), couponId);
     }
 
     public List<Coupon> getAllCustomerCoupons() throws AppException {
-        return this.couponServiceImp.getAllCouponsByCustomerId(customer.getId());
+        return getCouponServiceImp().getAllCouponsByCustomerId(customer.getId());
     }
 
     public List<Coupon> getAllCustomerCouponsByCategory(Category category) throws AppException {
-        return this.couponServiceImp.getAllCouponsByCustomerIdAndCategory(customer.getId(), category);
+        return getCouponServiceImp().getAllCouponsByCustomerIdAndCategory(customer.getId(), category);
     }
 
     public List<Coupon> getAllCustomerCouponsByMaxPrice(double maxPrice){
-        return this.couponServiceImp.getAllCouponsByCustomerIdAndMaxPrice(customer.getId(), maxPrice);
+        return getCouponServiceImp().getAllCouponsByCustomerIdAndMaxPrice(customer.getId(), maxPrice);
     }
 
     public void getCustomerDerails() throws AppException {
