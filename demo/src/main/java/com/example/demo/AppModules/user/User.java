@@ -110,6 +110,10 @@ public class User implements Serializable {
         return password;
     }
 
+    public UserType getUserType() {
+        return userType;
+    }
+
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
     }

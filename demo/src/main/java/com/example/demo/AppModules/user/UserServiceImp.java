@@ -4,27 +4,46 @@ import java.util.List;
 
 import com.example.demo.Error.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImp implements UserService{
     @Autowired
     private UserRepository userRepository;
+
+    @Value("${adminEmail}")
+    private String adminEmail;
+    @Value("${adminPassword}")
+    private String adminPassword;
     
     @Override
     public User addUser(User user) throws AppException {
-        if(this.userRepository.existsById(user.getId()) == true){
+        if(this.userRepository.existsById(user.getId())){
             throw new AppException(UserError.USER_ALREADY_EXISTS);
         }
-         User newUser = this.userRepository.save(user);
-         return newUser;
+        //check if admin
+        if(user.getUserType().equals(UserType.ADMIN)){
+            if(user.getEmail().equals(adminEmail) && user.getPassword().equals(adminPassword)){
+                return this.userRepository.save(user);
+            }else{
+                throw new AppException(UserError.USER_NOT_ADMIN);
+            }
+        }
+         return this.userRepository.save(user);
     }
-    
+
     @Override
-    public void updateUser(User user, int userId) throws Exception {
+    public User getSingleUser(int userId) throws AppException {
+        return this.userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(UserError.USER_NOT_FOUND));
+    }
+
+    @Override
+    public void updateUser(User user, int userId) throws AppException {
         User userFromDb = this.getSingleUser(userId);
-        if (userFromDb == null){
-            throw new AppException(UserError.USER_NOT_FOUND);
+        if(user.getEmail().equals(userFromDb.getEmail())){
+            throw new AppException(UserError.USER_EMAIL_NOT_UPDATABLE);
         }
         user.setId(userFromDb.getId());
         this.userRepository.save(user);
@@ -39,17 +58,22 @@ public class UserServiceImp implements UserService{
         }
     }
     @Override
-    public User getSingleUser(int userId) throws Exception {
-        return this.userRepository.findById(userId).orElseThrow(() -> new AppException(UserError.USER_NOT_FOUND));
+    public List<User> getAllUsersByUserType(UserType userType) {
+        return this.userRepository.findAllByUserType(userType);
     }
+
     @Override
-    public List<User> getUserList(int userType) 
-    {
-        return null;
-        // return this.userRepository.findAllByUserType(userType);
+    public User getUserByEmailAndPassword(String email, String password) throws AppException{
+        User loginUser = this.userRepository.findByEmailAndPassword(email, password);
+        if(loginUser == null){
+            throw new AppException(UserError.USER_INVALID);
+        }
+        return loginUser;
     }
+
     @Override
-    public List<User> getUserList() {
+    public List<User> getAllUsers() {
         return this.userRepository.findAll();
     }
+
 }

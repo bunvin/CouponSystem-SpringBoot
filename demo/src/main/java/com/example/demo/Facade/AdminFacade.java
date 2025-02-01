@@ -1,4 +1,8 @@
 package com.example.demo.Facade;
 
-public interface AdminFacade {
+import org.springframework.stereotype.Service;
+
+@Service
+public class AdminFacade extends ClientFacade{
+
 }

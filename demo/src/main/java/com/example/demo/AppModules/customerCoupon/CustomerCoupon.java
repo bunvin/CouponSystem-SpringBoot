@@ -47,7 +47,6 @@ public class CustomerCoupon {
 
     //getter setter
 
-
     public int getId() {
         return id;
     }
