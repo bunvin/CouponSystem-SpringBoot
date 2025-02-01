@@ -16,7 +16,8 @@ public class Customer implements Serializable {
     String firstName;
     String lastName;
 
-    @Column(updatable = false)
+    @OneToOne
+    @JoinColumn(name="user_id", updatable = false)
     private User user;
     //both with @ PostLocat after owner is created
     private String userEmail;

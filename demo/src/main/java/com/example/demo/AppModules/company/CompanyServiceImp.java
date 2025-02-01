@@ -75,4 +75,13 @@ public class CompanyServiceImp implements CompanyService {
         boolean nameOrEmailExist = this.companyRepository.existsByName(companyName) || this.companyRepository.existsByUserEmail(email);
         return nameOrEmailExist;
     }
+
+    @Override
+    public Company getCompanyByUserId(int userId) throws AppException {
+        Company company = this.companyRepository.findByUserId(userId);
+        if(company == null){
+            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
+        }
+        return company;
+    }
 }

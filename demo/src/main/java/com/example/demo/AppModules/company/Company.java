@@ -19,7 +19,8 @@ public class Company implements Serializable {
     @Column(updatable = false)
     String name;
 
-    @Column(updatable = false)
+    @OneToOne
+    @JoinColumn(name = "user_id", updatable = false)
     private User user;
     //both with @ PostLocat after user is created
     private String userEmail;

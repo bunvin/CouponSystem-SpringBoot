@@ -4,6 +4,7 @@ package com.example.demo.AppModules.company;
 
 import java.util.List;
 
+import com.example.demo.AppModules.user.User;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Error.AppException;
@@ -18,5 +19,6 @@ public interface CompanyService {
     List<Company> getAllCompanies();
 
     boolean isCompanyNameOrEmailExists(String companyName, String email);
+    Company getCompanyByUserId(int userId) throws AppException;
 
 }

@@ -2,7 +2,6 @@ package com.example.demo.AppModules.coupon;
 
 import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.Error.AppException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +15,7 @@ public interface CouponService {
 
     List<Coupon> getAllCoupons();
     List<Coupon> getAllCouponsByCompanyId(int companyId) throws AppException;
+    List<Coupon> getAllCouponsByCompanyIdAndCategory(int companyId, Category category);
     List<Coupon> getAllCouponsByCustomerId(int customerId) throws AppException;
     List<Coupon> getAllCouponsByCustomerIdAndMaxPrice(int customerId, double maxPrice);
     List<Coupon> getAllCouponsByCategory(Category category) throws AppException;

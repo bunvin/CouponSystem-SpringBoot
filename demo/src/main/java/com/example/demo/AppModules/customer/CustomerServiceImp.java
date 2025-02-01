@@ -48,6 +48,11 @@ public class CustomerServiceImp implements CustomerService{
     }
 
     @Override
+    public Customer getCustomerByUserId(int userId) {
+        return this.customerRepository.findByUserId(userId);
+    }
+
+    @Override
     public boolean isCustomerExist(User user) {
         return this.customerRepository.existsById(user.getId());
     }

@@ -7,24 +7,31 @@ import com.example.demo.Facade.AdminFacade;
 import com.example.demo.Facade.ClientFacade;
 import com.example.demo.Facade.CompanyFacade;
 import com.example.demo.Facade.CustomerFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import static com.example.demo.AppModules.user.UserType.*;
 
 @Component
 public class LoginManager {
-    UserServiceImp userServiceImp = new UserServiceImp();
+    private final UserServiceImp userServiceImp;
+
+    @Autowired
+    public LoginManager(UserServiceImp userServiceImp) {
+        this.userServiceImp = userServiceImp;
+    }
 
     public ClientFacade login(String email, String password) throws AppException {
         User user = userServiceImp.getUserByEmailAndPassword(email, password);
         if(user != null){
             switch(user.getUserType()){
                 case ADMIN:
-                    return new AdminFacade();
+                    AdminFacade adminFacade = new AdminFacade(user);
+                    return adminFacade;
                 case COMPANY:
-                    return new CompanyFacade();
+                    CompanyFacade companyFacade = new CompanyFacade(user);
+                    return companyFacade;
                 case CUSTOMER:
-                    return new CustomerFacade();
+                    CustomerFacade customerFacade = new CustomerFacade(user);
+                    return customerFacade;
                 }
             } return null;
         }

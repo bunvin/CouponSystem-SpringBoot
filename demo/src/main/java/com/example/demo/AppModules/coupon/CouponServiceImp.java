@@ -73,6 +73,11 @@ public class CouponServiceImp implements CouponService{
     }
 
     @Override
+    public List<Coupon> getAllCouponsByCompanyIdAndCategory(int companyId, Category category) {
+        return this.couponRepository.findAllByCompanyIdAndCategory(companyId, category);
+    }
+
+    @Override
     public List<Coupon> getAllCouponsByCustomerId(int customerId) throws AppException {
         List<CustomerCoupon> purchasedList = this.customerCouponService.getAllByCustomerId(customerId);
         return purchasedList.stream()
