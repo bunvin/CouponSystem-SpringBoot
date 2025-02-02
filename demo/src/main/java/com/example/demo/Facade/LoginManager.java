@@ -1,12 +1,8 @@
-package com.example.demo;
+package com.example.demo.Facade;
 
 import com.example.demo.AppModules.user.User;
 import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.Error.AppException;
-import com.example.demo.Facade.AdminFacade;
-import com.example.demo.Facade.ClientFacade;
-import com.example.demo.Facade.CompanyFacade;
-import com.example.demo.Facade.CustomerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

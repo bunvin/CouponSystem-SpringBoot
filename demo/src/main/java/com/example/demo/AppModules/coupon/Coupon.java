@@ -3,6 +3,8 @@ package com.example.demo.AppModules.coupon;
 import com.example.demo.AppModules.company.Company;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,8 +23,8 @@ public class Coupon {
 
     private String title;
     private String description;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int amount;
     private double price;
     private String image;
@@ -33,11 +35,10 @@ public class Coupon {
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
     //constractors
-
     public Coupon() {
     }
 
-    public Coupon(int id, Company company, Category category, String title, String description, LocalDateTime startDate, LocalDateTime endDate, int amount, double price, String image, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+    public Coupon(int id, Company company, Category category, String title, String description, LocalDate startDate, LocalDate endDate, int amount, double price, String image, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.company = company;
         this.category = category;
@@ -69,13 +70,19 @@ public class Coupon {
         private Category category;
         private String title;
         private String description;
-        private LocalDateTime startDate;
-        private LocalDateTime endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private int amount;
         private double price;
         private String image;
         private LocalDateTime createdDateTime = LocalDateTime.now(); // default value
         private LocalDateTime modifiedDateTime = LocalDateTime.now(); // default value
+
+        //before every update threw repo
+        @PreUpdate
+        public void updateModifiedDateTime() {
+            this.modifiedDateTime = LocalDateTime.now();
+        }
 
         // Builder methods for each field
         public CouponBuilder id(int id) {
@@ -103,12 +110,12 @@ public class Coupon {
             return this;
         }
 
-        public CouponBuilder startDate(LocalDateTime startDate) {
+        public CouponBuilder startDate(LocalDate startDate) {
             this.startDate = startDate;
             return this;
         }
 
-        public CouponBuilder endDate(LocalDateTime endDate) {
+        public CouponBuilder endDate(LocalDate endDate) {
             this.endDate = endDate;
             return this;
         }
@@ -167,11 +174,11 @@ public class Coupon {
         this.amount = amount;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -195,11 +202,11 @@ public class Coupon {
         return description;
     }
 
-    public LocalDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 

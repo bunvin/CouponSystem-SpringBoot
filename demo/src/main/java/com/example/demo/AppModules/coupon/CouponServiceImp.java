@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class CouponServiceImp implements CouponService{
             throw new AppException(CouponError.COUPON_AMOUNT_FINISHED);
         }
         //check expiration
-        if(coupon.getEndDate().isBefore(LocalDateTime.now())){
+        if(coupon.getEndDate().isBefore(LocalDate.now())){
             throw new AppException((CouponError.COUPON_EXPIRED));
         }
         //check if customer purchased before
