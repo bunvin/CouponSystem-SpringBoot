@@ -133,4 +133,10 @@ public class CouponServiceImp implements CouponService{
     public void deleteCouponPurchase(int customerId, int couponId) throws AppException {
         this.customerCouponService.deletePurchase(customerId,couponId); // exception if not found
     }
+
+    @Transactional
+    @Override
+    public void deleteAllExpiredCoupons() {
+        this.couponRepository.deleteByEndDateBefore(LocalDate.now());
+    }
 }

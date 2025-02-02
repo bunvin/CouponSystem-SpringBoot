@@ -4,6 +4,7 @@ import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.Error.AppException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -25,6 +26,8 @@ public interface CouponService {
     CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException;
     void deleteCouponPurchase(int customerId, int couponId) throws AppException;
 
+    //delete all expired coupons
+    void deleteAllExpiredCoupons();
 
 
 
