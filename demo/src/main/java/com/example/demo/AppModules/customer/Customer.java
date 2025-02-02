@@ -1,10 +1,12 @@
 package com.example.demo.AppModules.customer;
 
+import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.user.User;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Customer implements Serializable {
@@ -19,37 +21,29 @@ public class Customer implements Serializable {
     @OneToOne
     @JoinColumn(name="user_id", updatable = false)
     private User user;
-    //both with @ PostLocat after owner is created
-    private String userEmail;
-    private String userPassword;
 
     //no setter no builder default always
     @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomerCoupon> purchases;
+
     //constractors
-    public Customer(int id, String firstName, String lastName, User user, String userEmail, String userPassword) {
+
+    public Customer() {
     }
-    public Customer(int id, String firstName, String lastName, User user, String userEmail, String userPassword, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
+
+    public Customer(int id, String firstName, String lastName, User user, LocalDateTime createdDateTime, LocalDateTime modifiedDateTime) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.user = user;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
         this.createdDateTime = createdDateTime;
         this.modifiedDateTime = modifiedDateTime;
     }
 
-    //After entity is loaded
-    @PostLoad
-    public void postLoad() {
-        if (user != null) {
-            this.userEmail = user.getEmail();
-            this.userPassword = user.getPassword();
-        }
-    }
     //before every update threw repo
     @PreUpdate
     public void updateModifiedDateTime() {
@@ -66,8 +60,6 @@ public class Customer implements Serializable {
         private String firstName;
         private String lastName;
         private User user;
-        private String userEmail;
-        private String userPassword;
         private LocalDateTime createdDateTime = LocalDateTime.now(); // default value
         private LocalDateTime modifiedDateTime = LocalDateTime.now(); // default
 
@@ -94,9 +86,7 @@ public class Customer implements Serializable {
 
         // Build method to create Customer instance
         public Customer build() {
-            Customer customer = new Customer(id, firstName, lastName, user, userEmail, userPassword, createdDateTime, modifiedDateTime);
-            //to set userEmail and userPassword
-            customer.postLoad();
+            Customer customer = new Customer(id, firstName, lastName, user, createdDateTime, modifiedDateTime);
             return customer;
         }
     }
@@ -135,13 +125,6 @@ public class Customer implements Serializable {
         return user;
     }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
 
     public LocalDateTime getCreatedDateTime() {
         return createdDateTime;
@@ -158,8 +141,8 @@ public class Customer implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", user=" + user +
-                ", userEmail='" + userEmail + '\'' +
-                ", userPassword='" + userPassword + '\'' +
+                ", userEmail='" + user.getEmail() + '\'' +
+                ", userPassword='" + user.getPassword() + '\'' +
                 '}';
     }
 }

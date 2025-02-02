@@ -1,9 +1,10 @@
-package com.example.demo.Testing;
+package com.example.demo.testing;
 
 import java.time.*;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.example.demo.AppModules.company.Company;
@@ -11,12 +12,13 @@ import com.example.demo.AppModules.coupon.Category;
 import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.user.User;
+import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.AppModules.user.UserType;
-import org.springframework.cglib.core.Local;
+import com.example.demo.Error.AppException;
 
 public class FactoryUtils {
     //Companies
-    public static List<Company> randomCompanies(int num) {
+    public static List<Company> randomCompanies(int num, UserServiceImp userServiceImp) throws AppException {
         List<Company> newCompanies = new ArrayList<>();
 
         String[] storeNames = {"The Fin & Scale", "Oceanic Treasures", "Fishy Finds", "The Fish Bowl", "Splash of Aqua"
@@ -28,10 +30,11 @@ public class FactoryUtils {
             int randomNumber = ThreadLocalRandom.current().nextInt(9, 999);
 
             User user = User.builder()
-                    .email(randomStoreNameTrimed + (i + 1) + "@gmail.com")
+                    .email(randomStoreNameTrimed + (i+1) + "@gmail.com")
                     .password("1234" + randomNumber)
                     .userType(UserType.COMPANY)
                     .build();
+            user = userServiceImp.addUser(user);
 
             Company company = Company.builder()
                     .name(randomStoreName + (i + 1))
@@ -42,7 +45,7 @@ public class FactoryUtils {
         return newCompanies;
     }
 
-     public static List<Customer> randomCustomers(int num) {
+     public static List<Customer> randomCustomers(int num, UserServiceImp userServiceImp) throws AppException {
          List<Customer> newCustomers = new ArrayList<>();
 
          String[] firstNames = {"Liam", "Emma", "Noah", "Ava", "Ethan", "Sophia", "James", "Mia", "Oliver", "Isabella"};
@@ -59,6 +62,7 @@ public class FactoryUtils {
                      .password("1234" + randomNumber)
                      .userType(UserType.CUSTOMER)
                      .build();
+             user = userServiceImp.addUser(user);
 
              Customer customer = Customer.builder()
                      .firstName(randomFirstName)

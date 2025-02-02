@@ -38,6 +38,7 @@ public class User implements Serializable {
     public void updateModifiedDateTime() {
         this.modifiedDateTime = LocalDateTime.now();
     }
+
     //builder
     public static UserBuilder builder() {
         return new UserBuilder();

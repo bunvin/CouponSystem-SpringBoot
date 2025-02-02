@@ -1,5 +1,6 @@
 package com.example.demo.AppModules.coupon;
 
+import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.company.CompanyServiceImp;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.customer.CustomerServiceImp;
@@ -28,7 +29,16 @@ public class CouponServiceImp implements CouponService{
     @Transactional
     @Override
     public Coupon addCoupon(Coupon coupon) throws AppException {
-        //not same title in company
+        Company company = coupon.getCompany();
+        System.out.println("coupon's company: " +company);
+
+        //make sure Company is attached (after exception: Hibernate detached entity on company)
+        if (company.getId() != 0) {
+            company = companyServiceImp.getSingleCompany(company.getId());
+        }
+        coupon.setCompany(company);
+
+        //validation - not same title in company
         if(this.couponRepository.existsByTitleAndCompanyId(
                 coupon.getTitle(), coupon.getCompany().getId())){
             throw new AppException(CouponError.COUPON_NAME_TAKEN);
@@ -39,13 +49,16 @@ public class CouponServiceImp implements CouponService{
         return this.couponRepository.save(coupon);
     }
 
+    @Transactional
     @Override
     public void updateCoupon(Coupon coupon, int couponId) throws AppException {
         //updatable = false:  id, company
         Coupon dbCoupon = this.getSingleCoupon(couponId);
-        if(coupon.getCompany().equals(dbCoupon.getCompany())){
+
+        if(coupon.getCompany().equals(dbCoupon.getCompany())){ //equals compare id's
             coupon.setId(couponId);
             this.couponRepository.save(coupon);
+            System.out.println("Coupon is updated");
         }else{
             throw new AppException(CouponError.COUPON_COMPANY_UNUPDATABLE);
         }
@@ -137,6 +150,7 @@ public class CouponServiceImp implements CouponService{
     @Transactional
     @Override
     public void deleteAllExpiredCoupons() {
-        this.couponRepository.deleteByEndDateBefore(LocalDate.now());
+        this.couponRepository.deleteExpiredCouponsCustomerCoupons();
+        this.couponRepository.deleteExpiredCoupons();
     }
 }

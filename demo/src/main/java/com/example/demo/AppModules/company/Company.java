@@ -2,7 +2,9 @@ package com.example.demo.AppModules.company;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import com.example.demo.AppModules.coupon.Coupon;
 import jakarta.persistence.*;
 import org.springframework.context.annotation.Lazy;
 
@@ -22,14 +24,13 @@ public class Company implements Serializable {
     @OneToOne
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
-    //both with @ PostLocat after user is created
-    private String userEmail;
-    private String userPassword;
 
-    //no setter no builder default always
     @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Coupon> coupons;
 
     //Constractor
     public Company() {
@@ -41,13 +42,19 @@ public class Company implements Serializable {
         this.user = user;
     }
 
-    //After entity with user is loaded, save user and password
-    @PostLoad
-    public void postLoad() {
-        if (user != null) {
-            this.userEmail = user.getEmail();
-            this.userPassword = user.getPassword();
-        }
+    @Override
+    public boolean equals(Object obj) {
+//        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;  // Check if same class
+
+        Company company = (Company) obj;
+        // Check ID for equality
+        return id == company.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 
     //before every update threw repo
@@ -111,14 +118,6 @@ public class Company implements Serializable {
 
     public User getCompanyUser() {
         return user;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
     }
 
     public LocalDateTime getCreatedDateTime() {

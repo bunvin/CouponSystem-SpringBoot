@@ -17,7 +17,7 @@ public class CustomerServiceImp implements CustomerService{
         if(this.customerRepository.existsById(customer.getId())){
             throw new AppException(CustomerError.CUSTOMER_ALREADY_EXIST);
         }
-        if(this.customerRepository.existsByUserEmail(customer.getUserEmail())){
+        if(this.customerRepository.existsByUserEmail(customer.getUser().getEmail())){
             throw new AppException(CustomerError.CUSTOMER_EMAIL_IN_USE);
         }
         return this.customerRepository.save(customer);

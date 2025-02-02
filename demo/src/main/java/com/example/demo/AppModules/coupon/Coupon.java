@@ -1,11 +1,13 @@
 package com.example.demo.AppModules.coupon;
 
 import com.example.demo.AppModules.company.Company;
+import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Coupon {
@@ -14,8 +16,8 @@ public class Coupon {
     @Column(updatable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)//delete coupon with company
-    @JoinColumn(name="companyId", updatable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="companyId", updatable = false, nullable = false)
     private Company company;
 
     @Enumerated(EnumType.STRING)
@@ -28,6 +30,9 @@ public class Coupon {
     private int amount;
     private double price;
     private String image;
+
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CustomerCoupon> purchases;
 
     //no setter no builder default always
     @Column(updatable = false)

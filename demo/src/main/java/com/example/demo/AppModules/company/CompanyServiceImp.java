@@ -20,7 +20,7 @@ public class CompanyServiceImp implements CompanyService {
         if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByUserEmail(company.getUserEmail())){
+        if(this.companyRepository.existsByUserEmail(company.getCompanyUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
         Company newCompany = this.companyRepository.save(company);
@@ -31,17 +31,17 @@ public class CompanyServiceImp implements CompanyService {
     public void updateCompany(Company company, int companyId) throws AppException {
         Company dbCompany = getSingleCompany(companyId);
         //company name and email should be unique
-        if(this.companyRepository.existsByName(company.getName())){
-            throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
+        if(!company.getName().equals(dbCompany.getName())){
+            throw new AppException(CompanyError.COMPANY_NAME_IS_UNUPDATABLE);
         }
-        if(this.companyRepository.existsByUserEmail(company.getUserEmail())){
-            throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
+        if(!company.getCompanyUser().getEmail()
+                .equals(dbCompany.getCompanyUser().getEmail())){
+            throw new AppException(CompanyError.COMPANY_EMAIL_IS_UNUPDATABLE);
         }
         company.setCompanyUser(dbCompany.getCompanyUser()); //needed?
         company.setId(dbCompany.getId());
 
         this.companyRepository.save(company);
-
 }
 
     @Override

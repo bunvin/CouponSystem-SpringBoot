@@ -10,7 +10,7 @@ public class CouponExpirationDailyJob {
     @Autowired
     CouponServiceImp couponServiceImp;
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 20 00 * * ?")
     public void dailyJob(){
         couponServiceImp.deleteAllExpiredCoupons();
         System.out.println("FINISHED: all coupons are up to date");

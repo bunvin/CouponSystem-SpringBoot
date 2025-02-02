@@ -23,11 +23,16 @@ public class CustomerFacade extends ClientFacade{
     public CustomerFacade() throws AppException {super();
     }
 
-    @PostConstruct
-    public void initCustomer(){
-        if(this.userLogin != null){
-            this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
-        }
+//    @PostConstruct
+//    public void initCustomer(){
+//        if(this.userLogin != null){
+//            this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
+//        }
+//    }
+
+    public void setUserLoginAndCustomer(User userLogin) {
+        this.userLogin = userLogin;
+        this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
     }
 
     public User getUserLogin() {
@@ -37,6 +42,8 @@ public class CustomerFacade extends ClientFacade{
     public void setUserLogin(User userLogin) {
         this.userLogin = userLogin;
     }
+
+
 
     public CustomerCoupon addCouponPurchases(int couponId) throws AppException {
         return getCouponServiceImp().addCouponPurchase(customer.getId(), couponId);
@@ -59,7 +66,7 @@ public class CustomerFacade extends ClientFacade{
         System.out.println("CustomerId: "+customer.getId());
         System.out.println("First Name: "+ customer.getFirstName());
         System.out.println("Last Name: "+customer.getLastName());
-        System.out.println("Customer Email: "+customer.getUserEmail());
+        System.out.println("Customer Email: "+customer.getUser().getEmail());
         System.out.println("Purchase coupons: ");
         for(Coupon coupon : this.getAllCustomerCoupons()){
             System.out.println(coupon);

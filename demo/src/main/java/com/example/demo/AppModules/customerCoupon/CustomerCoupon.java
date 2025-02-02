@@ -14,11 +14,11 @@ public class CustomerCoupon {
     @Column(updatable = false)
     private int id;
 
-    @ManyToOne(cascade = CascadeType.ALL)//delete purchase with customer
+    @ManyToOne
     @JoinColumn(name="customerId")
     Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)//delete purchase with coupon
+    @ManyToOne
     @JoinColumn(name= "couponId")
     Coupon coupon;
 

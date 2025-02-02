@@ -1,6 +1,7 @@
 package com.example.demo.Facade;
 
 import com.example.demo.AppModules.company.Company;
+import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
@@ -58,6 +59,8 @@ public class AdminFacade extends ClientFacade{
     public Customer getCustomerById(int customerId) throws AppException {
         return getCustomerServiceImp().getSingleCustomer(customerId);
     }
+
+    public List<Coupon> getAllCoupons(){return getCouponServiceImp().getAllCoupons();}
 
     public User getUserLogin() {
         return userLogin;
