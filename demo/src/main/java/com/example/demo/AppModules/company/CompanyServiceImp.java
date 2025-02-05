@@ -38,7 +38,7 @@ public class CompanyServiceImp implements CompanyService {
                 .equals(dbCompany.getCompanyUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_IS_UNUPDATABLE);
         }
-        company.setCompanyUser(dbCompany.getCompanyUser()); //needed?
+        company.setCompanyUser(dbCompany.getCompanyUser()); 
         company.setId(dbCompany.getId());
 
         this.companyRepository.save(company);

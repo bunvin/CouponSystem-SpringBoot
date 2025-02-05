@@ -1,18 +1,17 @@
 package com.example.demo.Facade;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.demo.AppModules.coupon.Category;
 import com.example.demo.AppModules.coupon.Coupon;
-import com.example.demo.AppModules.coupon.CouponServiceImp;
 import com.example.demo.AppModules.customer.Customer;
-import com.example.demo.AppModules.customer.CustomerServiceImp;
 import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CustomerFacade extends ClientFacade{
@@ -23,12 +22,12 @@ public class CustomerFacade extends ClientFacade{
     public CustomerFacade() throws AppException {super();
     }
 
-//    @PostConstruct
-//    public void initCustomer(){
-//        if(this.userLogin != null){
-//            this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
-//        }
-//    }
+   @PostConstruct
+   public void initCustomer(){
+       if(this.userLogin != null){
+           this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
+       }
+   }
 
     public void setUserLoginAndCustomer(User userLogin) {
         this.userLogin = userLogin;

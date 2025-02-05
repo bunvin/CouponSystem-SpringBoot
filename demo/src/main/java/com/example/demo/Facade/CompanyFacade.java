@@ -1,17 +1,16 @@
 package com.example.demo.Facade;
 
-import com.example.demo.AppModules.company.Company;
-import com.example.demo.AppModules.company.CompanyServiceImp;
-import com.example.demo.AppModules.coupon.Category;
-import com.example.demo.AppModules.coupon.Coupon;
-import com.example.demo.AppModules.coupon.CouponServiceImp;
-import com.example.demo.AppModules.user.User;
-import com.example.demo.Error.AppException;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.example.demo.AppModules.company.Company;
+import com.example.demo.AppModules.coupon.Category;
+import com.example.demo.AppModules.coupon.Coupon;
+import com.example.demo.AppModules.user.User;
+import com.example.demo.Error.AppException;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class CompanyFacade extends ClientFacade{
@@ -19,13 +18,14 @@ public class CompanyFacade extends ClientFacade{
     private User userLogin;
     private Company company;
 
-//    @PostConstruct
-//    public void initCompany() throws AppException {
-//        if(this.userLogin != null){
-//            this.company = getCompanyServiceImp().getCompanyByUserId(userLogin.getId());
-//            System.out.println("CompanyFacade constractor: " +company);
-//        }
-//    }
+   @PostConstruct
+   public void initCompany() throws AppException {
+       if(this.userLogin != null){
+           this.company = getCompanyServiceImp().getCompanyByUserId(userLogin.getId());
+           System.out.println("CompanyFacade constractor: " +company);
+       }
+   }
+
     public void setUserLoginAndCompany(User userLogin) throws AppException {
         this.userLogin = userLogin;
         this.company = getCompanyServiceImp().getCompanyByUserId(userLogin.getId());

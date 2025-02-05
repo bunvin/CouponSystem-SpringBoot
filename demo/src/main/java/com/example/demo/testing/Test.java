@@ -295,5 +295,6 @@ public class Test implements CommandLineRunner {
         for (Coupon coupon : allCoupons) {
             System.out.println(coupon);
         }
+
     }
 }

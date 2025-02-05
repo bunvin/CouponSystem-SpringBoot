@@ -5,10 +5,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.demo.AppModules.coupon.Coupon;
-import jakarta.persistence.*;
-import org.springframework.context.annotation.Lazy;
-
 import com.example.demo.AppModules.user.User;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PreUpdate;
 
 @Entity
 public class Company implements Serializable {
@@ -40,21 +48,6 @@ public class Company implements Serializable {
         this.id = id;
         this.name = name;
         this.user = user;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-//        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;  // Check if same class
-
-        Company company = (Company) obj;
-        // Check ID for equality
-        return id == company.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(id);
     }
 
     //before every update threw repo
@@ -137,5 +130,17 @@ public class Company implements Serializable {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()) return false;  // Check if same class
+        Company company = (Company) obj;
+        // Check ID for equality
+        return id == company.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 
 }
