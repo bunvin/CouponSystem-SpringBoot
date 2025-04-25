@@ -47,7 +47,13 @@ public class CompanyServiceImp implements CompanyService {
     @Override
     public void deleteCompany(int companyId) throws AppException {
         Company company = getSingleCompany(companyId);
-        this.companyRepository.deleteById(companyId);
+        this.companyRepository.deleteById(company.getId());
+    }
+
+    @Override
+    public void deleteCompanyByUserId(int userId) throws AppException {
+        Company company = getCompanyByUserId(userId);
+        this.companyRepository.deleteById(company.getId());
     }
 
     @Override
@@ -57,8 +63,17 @@ public class CompanyServiceImp implements CompanyService {
     }
 
     @Override
-    public Company getSingleCompanyByName(String companyName) throws AppException {
+    public Company getCompanyByName(String companyName) throws AppException {
         Company company = this.companyRepository.findByName(companyName);
+        if(company == null){
+            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
+        }
+        return company;
+    }
+
+    @Override
+    public Company getCompanyByUserId(int userId) throws AppException {
+        Company company = this.companyRepository.findByUserId(userId);
         if(company == null){
             throw new AppException(CompanyError.COMPANY_NOT_FOUND);
         }
@@ -76,12 +91,7 @@ public class CompanyServiceImp implements CompanyService {
         return nameOrEmailExist;
     }
 
-    @Override
-    public Company getCompanyByUserId(int userId) throws AppException {
-        Company company = this.companyRepository.findByUserId(userId);
-        if(company == null){
-            throw new AppException(CompanyError.COMPANY_NOT_FOUND);
-        }
-        return company;
-    }
+
+
+
 }

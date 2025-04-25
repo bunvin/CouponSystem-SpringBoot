@@ -9,7 +9,8 @@ public enum UserError implements ErrorMessage{
     USER_ALREADY_EXISTS(1002, "User already exists"),
     USER_NOT_ADMIN(1003, "Invalid admin, user's email or password mis-match admin account"),
     USER_EMAIL_NOT_UPDATABLE(1004, "User email can not be updated"),
-    USER_INVALID(1005, "invalid email or password");
+    USER_INVALID(1005, "invalid email or password"),
+    USER_TYPE_INCURRECT(1006, "User Type doesn't match");
 
     private final int code;
     private final String message;

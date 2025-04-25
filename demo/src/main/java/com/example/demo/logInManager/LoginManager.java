@@ -2,13 +2,17 @@ package com.example.demo.logInManager;
 
 import com.example.demo.AppModules.user.User;
 import com.example.demo.AppModules.user.UserServiceImp;
+import com.example.demo.AppModules.user.UserType;
 import com.example.demo.Error.AppException;
 import com.example.demo.Facade.AdminFacade;
 import com.example.demo.Facade.ClientFacade;
 import com.example.demo.Facade.CompanyFacade;
 import com.example.demo.Facade.CustomerFacade;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.example.demo.AppModules.user.UserError;
 
 @Component
 public class LoginManager {
@@ -27,8 +31,11 @@ public class LoginManager {
     }
 
 
-    public ClientFacade login(String email, String password) throws AppException {
+    public ClientFacade login(String email, String password, UserType userType) throws AppException {
         User user = userServiceImp.getUserByEmailAndPassword(email, password);
+        if(user.getUserType() != userType){
+            throw new AppException(UserError.USER_TYPE_INCURRECT);
+        }
         if(user != null){
             switch(user.getUserType()){
                 case ADMIN:

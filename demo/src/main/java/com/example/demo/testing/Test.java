@@ -1,5 +1,15 @@
 package com.example.demo.testing;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.stereotype.Component;
+
 import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.coupon.Category;
 import com.example.demo.AppModules.coupon.Coupon;
@@ -12,15 +22,6 @@ import com.example.demo.Facade.ClientFacade;
 import com.example.demo.Facade.CompanyFacade;
 import com.example.demo.Facade.CustomerFacade;
 import com.example.demo.logInManager.LoginManager;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 @EnableScheduling //allows the scheduled dailyJob to run
 @Component
@@ -38,7 +39,7 @@ public class Test implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        //adding admin user
+        // adding admin user
         User adminUser = User.builder()
                 .userType(UserType.ADMIN)
                 .email(adminEmail)
@@ -49,7 +50,7 @@ public class Test implements CommandLineRunner {
 
         System.out.println("########## ADMIN FACADE ##########");
 
-        ClientFacade admin = loginManager.login(adminEmail, adminPassword);
+        ClientFacade admin = loginManager.login(adminEmail, adminPassword, UserType.ADMIN);
 
         AdminFacade adminFacade;
         adminFacade = (AdminFacade) admin; // casting from ClientFacade into AdminFacade
@@ -79,8 +80,8 @@ public class Test implements CommandLineRunner {
         System.out.println("    used: deleteCompany");
 
         System.out.println("Companies in db: " + allCompanies.size());
-        adminFacade.deleteCompany(2);
-        System.out.println("Deleted, id = 2");
+        System.out.println("CompanyId to delete = "+ allCompanies.get(0).getId());
+        adminFacade.deleteCompany(allCompanies.get(0).getId());
         allCompanies = adminFacade.getAllCompanies();
         System.out.println("Companies in db: " + allCompanies.size());
 
@@ -124,7 +125,7 @@ public class Test implements CommandLineRunner {
         CompanyFacade companyFacade;
         Company company = adminFacade.getCompanyById(3);
 
-        ClientFacade companyLogin = loginManager.login(company.getCompanyUser().getEmail(), company.getCompanyUser().getPassword());
+        ClientFacade companyLogin = loginManager.login(company.getCompanyUser().getEmail(), company.getCompanyUser().getPassword(), UserType.COMPANY);
 
         //Casting ClientFacade into CompanyFacade
         companyFacade = (CompanyFacade) companyLogin;
@@ -206,7 +207,7 @@ public class Test implements CommandLineRunner {
                         .getId());
         System.out.println("customerDb: " + customerDb);
 
-        ClientFacade customer = loginManager.login(customerDb.getUser().getEmail(), customerDb.getUser().getPassword());
+        ClientFacade customer = loginManager.login(customerDb.getUser().getEmail(), customerDb.getUser().getPassword(), customerDb.getUser().getUserType());
 
         //casting into CustomerFacade from ClientFacade
         customerFacade = (CustomerFacade) customer;
