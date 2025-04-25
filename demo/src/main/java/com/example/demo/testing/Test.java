@@ -50,7 +50,7 @@ public class Test implements CommandLineRunner {
 
         System.out.println("########## ADMIN FACADE ##########");
 
-        ClientFacade admin = loginManager.login(adminEmail, adminPassword, UserType.ADMIN);
+        ClientFacade admin = loginManager.login(adminEmail, adminPassword, UserType.ADMIN.toString());
 
         AdminFacade adminFacade;
         adminFacade = (AdminFacade) admin; // casting from ClientFacade into AdminFacade
@@ -125,7 +125,7 @@ public class Test implements CommandLineRunner {
         CompanyFacade companyFacade;
         Company company = adminFacade.getCompanyById(3);
 
-        ClientFacade companyLogin = loginManager.login(company.getCompanyUser().getEmail(), company.getCompanyUser().getPassword(), UserType.COMPANY);
+        ClientFacade companyLogin = loginManager.login(company.getCompanyUser().getEmail(), company.getCompanyUser().getPassword(), UserType.COMPANY.toString());
 
         //Casting ClientFacade into CompanyFacade
         companyFacade = (CompanyFacade) companyLogin;
@@ -207,7 +207,7 @@ public class Test implements CommandLineRunner {
                         .getId());
         System.out.println("customerDb: " + customerDb);
 
-        ClientFacade customer = loginManager.login(customerDb.getUser().getEmail(), customerDb.getUser().getPassword(), customerDb.getUser().getUserType());
+        ClientFacade customer = loginManager.login(customerDb.getUser().getEmail(), customerDb.getUser().getPassword(), customerDb.getUser().getUserType().toString());
 
         //casting into CustomerFacade from ClientFacade
         customerFacade = (CustomerFacade) customer;

@@ -31,9 +31,9 @@ public class LoginManager {
     }
 
 
-    public ClientFacade login(String email, String password, UserType userType) throws AppException {
+    public ClientFacade login(String email, String password, String userType) throws AppException {
         User user = userServiceImp.getUserByEmailAndPassword(email, password);
-        if(user.getUserType() != userType){
+        if(user.getUserType() != UserType.valueOf(userType)){
             throw new AppException(UserError.USER_TYPE_INCURRECT);
         }
         if(user != null){
