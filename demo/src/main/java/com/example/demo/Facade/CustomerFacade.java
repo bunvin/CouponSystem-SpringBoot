@@ -23,13 +23,13 @@ public class CustomerFacade extends ClientFacade{
     }
 
    @PostConstruct
-   public void initCustomer(){
+   public void initCustomer() throws AppException{
        if(this.userLogin != null){
            this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
        }
    }
 
-    public void setUserLoginAndCustomer(User userLogin) {
+    public void setUserLoginAndCustomer(User userLogin) throws AppException {
         this.userLogin = userLogin;
         this.customer = getCustomerServiceImp().getCustomerByUserId(userLogin.getId());
     }

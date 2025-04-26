@@ -48,7 +48,11 @@ public class CustomerServiceImp implements CustomerService{
     }
 
     @Override
-    public Customer getCustomerByUserId(int userId) {
+    public Customer getCustomerByUserId(int userId) throws AppException {
+        Customer customer = this.customerRepository.findByUserId(userId);
+        if(customer == null){
+            throw new AppException(CustomerError.CUSTOMER_NOT_FOUND);
+        }
         return this.customerRepository.findByUserId(userId);
     }
 

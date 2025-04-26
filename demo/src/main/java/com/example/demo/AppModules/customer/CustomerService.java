@@ -13,7 +13,7 @@ public interface CustomerService {
     void deleteCustomer(int customerId) throws AppException;
     Customer getSingleCustomer(int customerID) throws AppException;
     List<Customer> getAllCustomer();
-    Customer getCustomerByUserId(int userId);
+    Customer getCustomerByUserId(int userId) throws AppException;
 
     boolean isCustomerExist(User user);
     boolean isCustomerEmailExist(String email);

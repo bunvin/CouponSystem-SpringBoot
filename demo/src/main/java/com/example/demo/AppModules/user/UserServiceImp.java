@@ -2,7 +2,13 @@ package com.example.demo.AppModules.user;
 
 import java.util.List;
 
+import com.example.demo.AppModules.company.Company;
+import com.example.demo.AppModules.company.CompanyServiceImp;
+import com.example.demo.AppModules.customer.Customer;
+import com.example.demo.AppModules.customer.CustomerServiceImp;
 import com.example.demo.Error.AppException;
+
+import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,6 +17,13 @@ import org.springframework.stereotype.Service;
 public class UserServiceImp implements UserService{
     @Autowired
     private UserRepository userRepository;
+    @Lazy
+    @Autowired
+    private CompanyServiceImp companyService;
+    @Lazy
+    @Autowired
+    private CustomerServiceImp customerService;
+    
 
     @Value("${adminEmail}")
     private String adminEmail;
@@ -72,8 +85,27 @@ public class UserServiceImp implements UserService{
     }
 
     @Override
+    public User getUserByEmail(String email) throws AppException{
+        User loginUser = this.userRepository.findByEmail(email);
+        if(loginUser == null){
+            throw new AppException(UserError.USER_INVALID);
+        }
+        return loginUser;
+    }
+
+    @Override
     public List<User> getAllUsers() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public Company getCompanyByUserId(int userId) throws AppException {
+        return this.companyService.getCompanyByUserId(userId);
+    }
+
+    @Override
+    public Customer getCustomerByUserId(int userId) throws AppException {
+        return this.customerService.getCustomerByUserId(userId);
     }
 
 }
