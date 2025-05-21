@@ -2,9 +2,7 @@ package com.example.demo.testing;
 
 import java.time.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import com.example.demo.AppModules.company.Company;

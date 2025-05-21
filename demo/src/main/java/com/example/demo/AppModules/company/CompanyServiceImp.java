@@ -5,6 +5,7 @@ package com.example.demo.AppModules.company;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.Error.AppException;
@@ -13,6 +14,9 @@ import com.example.demo.Error.AppException;
 public class CompanyServiceImp implements CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Company addCompany(Company company) throws AppException {
@@ -23,6 +27,7 @@ public class CompanyServiceImp implements CompanyService {
         if(this.companyRepository.existsByUserEmail(company.getCompanyUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
+
         Company newCompany = this.companyRepository.save(company);
         return newCompany;
     }

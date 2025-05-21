@@ -1,5 +1,7 @@
 package com.example.demo.Security;
 
+import com.example.demo.AppModules.user.UserError;
+import com.example.demo.AppModules.user.UserServiceImp;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Lazy;
 
 import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.user.User;
-import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.AppModules.user.UserType;
 
 import java.security.Key;
@@ -29,6 +31,7 @@ import com.example.demo.Error.AppException;
 public class JwtUtil {
 
     @Autowired
+    @Lazy
     UserServiceImp userService;
 
     @Value("${jwt.secret}")
@@ -36,6 +39,39 @@ public class JwtUtil {
 
     @Value("${jwt.expiration}")
     private long expiration;
+
+    public String generateToken(UserDetails userDetails) throws AppException {
+        // Extract the User object from UserDetails
+        User user = null;
+        if (userDetails instanceof UserDetailsImpl) {
+            user = ((UserDetailsImpl) userDetails).getUser();
+        } else {
+            throw new AppException(UserError.USER_INVALID);
+        }
+
+        Map<String, Object> claims = new HashMap<>();
+
+        // build claims
+        if (user != null) {
+            // general / user
+            claims.put("userType", user.getUserType().name());
+            claims.put("userId", user.getId());
+
+            // Type-specific information
+            if (user.getUserType() == UserType.COMPANY) {
+                Company company = userService.getCompanyByUserId(user.getId());
+                claims.put("companyId", company.getId());
+                claims.put("companyName", company.getName());
+            } else if (user.getUserType() == UserType.CUSTOMER) {
+                Customer customer = userService.getCustomerByUserId(user.getId());
+                claims.put("customerId", customer.getId());
+                claims.put("firstName", customer.getFirstName());
+                claims.put("lastName", customer.getLastName());
+            }
+        }
+
+        return createToken(claims, userDetails.getUsername());
+    }
 
     public String generateToken(User user) throws AppException {
         Map<String, Object> claims = new HashMap<>();
@@ -54,10 +90,11 @@ public class JwtUtil {
                 claims.put("customerId", customer.getId());
                 claims.put("firstName", customer.getFirstName());
                 claims.put("lastName", customer.getLastName());
-            }         
+            }
         }
-        return createToken(claims, user.getUsername()); //no user without UserName (Email)
+        return createToken(claims, user.getEmail()); //no user without UserName (Email)
     }
+
 
 // Custom claims extraction methods 
     public String extractUserType(String token) {

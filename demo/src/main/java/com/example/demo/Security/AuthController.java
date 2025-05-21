@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,31 +33,34 @@ public class AuthController {
 
     
     @Autowired
-    private UserService userService; 
-    
+    private UserService userService;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest authRequest) throws AppException {
         try {
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    authRequest.getEmail(), 
-                    authRequest.getPassword()
-                )
-            );
-        } catch (BadCredentialsException e) {
+            // Use your custom method instead of authenticationManager
+            User user = userService.getUserByEmailAndPassword(authRequest.getEmail(), authRequest.getPassword());
+
+            // Verify user type matches the request
+            if(user.getUserType().name() == null ? authRequest.getUserType() != null : !user.getUserType().name().equals(authRequest.getUserType())){
+                throw new AppException(UserError.USER_INVALID);
+            }
+
+            // Create UserDetails from the authenticated user
+            UserDetails userDetails = new UserDetailsImpl(user);
+
+            // Generate token
+            final String jwt = jwtUtil.generateToken(userDetails);
+
+            return ResponseEntity.ok(new TokenResponse(jwt));
+
+        } catch (AppException e) {
+            // Handle application exceptions (including invalid credentials)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
-        
-        final User user = userService.getUserByEmail(authRequest.getEmail());
-
-        //User not null, types not equal => invalid request       
-        if(user.getUserType().name() == null ? authRequest.getUserType() != null : !user.getUserType().name().equals(authRequest.getUserType())){
-            throw new AppException(UserError.USER_INVALID);
-        }
-
-        final String jwt = jwtUtil.generateToken(user);
-        
-        return ResponseEntity.ok(new TokenResponse(jwt));
     }
     
     // @PostMapping("/register")

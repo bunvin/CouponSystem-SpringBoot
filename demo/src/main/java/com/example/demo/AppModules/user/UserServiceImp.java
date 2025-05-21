@@ -1,22 +1,25 @@
 package com.example.demo.AppModules.user;
 
-import java.util.List;
-
 import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.company.CompanyServiceImp;
 import com.example.demo.AppModules.customer.Customer;
 import com.example.demo.AppModules.customer.CustomerServiceImp;
 import com.example.demo.Error.AppException;
-
-import org.hibernate.validator.internal.util.stereotypes.Lazy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserServiceImp implements UserService{
+public class UserServiceImp implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
     @Lazy
     @Autowired
     private CompanyServiceImp companyService;
@@ -43,7 +46,10 @@ public class UserServiceImp implements UserService{
                 throw new AppException(UserError.USER_NOT_ADMIN);
             }
         }
-         return this.userRepository.save(user);
+        //encode password
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        return this.userRepository.save(user);
     }
 
     @Override
@@ -77,10 +83,22 @@ public class UserServiceImp implements UserService{
 
     @Override
     public User getUserByEmailAndPassword(String email, String password) throws AppException{
-        User loginUser = this.userRepository.findByEmailAndPassword(email, password);
+        User loginUser = this.userRepository.findByEmail(email);
+
         if(loginUser == null){
             throw new AppException(UserError.USER_INVALID);
         }
+
+        if (loginUser.getUserType() == UserType.ADMIN &&
+                email.equals(adminEmail) &&
+                password.equals(adminPassword)) {
+            return loginUser;
+        }
+
+        if (!passwordEncoder.matches(password, loginUser.getPassword())){
+            throw new AppException(UserError.USER_INVALID);
+        }
+
         return loginUser;
     }
 

@@ -1,31 +1,24 @@
 package com.example.demo.AppModules.user;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.*;
 
 @Entity
-public class User implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String email;
     private String password;
 
-   @Enumerated(EnumType.STRING)
-   private UserType userType;
+    @Enumerated(EnumType.STRING)
+    private UserType userType;
 
     @Column(updatable = false)
     private LocalDateTime createdDateTime = LocalDateTime.now();
     private LocalDateTime modifiedDateTime = LocalDateTime.now();
 
-    //constractors
+    // Constructors
     public User() {
     }
 
@@ -38,13 +31,13 @@ public class User implements UserDetails {
         this.modifiedDateTime = modifiedDateTime;
     }
 
-    //before every update
+    // Before every update
     @PreUpdate
     public void updateModifiedDateTime() {
         this.modifiedDateTime = LocalDateTime.now();
     }
 
-    //builder
+    // Builder
     public static UserBuilder builder() {
         return new UserBuilder();
     }
@@ -87,7 +80,7 @@ public class User implements UserDetails {
         }
     }
 
-    //getter setter
+    // Getters and Setters
     public void setId(int id) {
         this.id = id;
     }
@@ -136,15 +129,5 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", userType=" + userType +
                 '}';
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();    
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
     }
 }

@@ -1,6 +1,4 @@
-CompanyServiceImp
-look at it maybe have some changes, older code
-
-CouponServiceImp >> update coupon
-in bean updatable = false in fields: id, company
-should update check and throw exception?
+CIRCULAR DEPENDENCY WHEN autH ADMIN
+1. seperate userDerailes service from user
+2. fix DaoAuthenticationProvider and AuthenticationManager
+3. create a CustomAuthenticationProvider  for ADMIN user

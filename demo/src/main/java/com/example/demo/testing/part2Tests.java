@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,7 @@ import com.example.demo.logInManager.LoginManager;
 
 @EnableScheduling //allows the scheduled dailyJob to run
 @Component
-public class Test implements CommandLineRunner {
+public class part2Tests { //implements CommandLineRunner {
     @Autowired
     LoginManager loginManager;
     @Autowired
@@ -36,7 +35,7 @@ public class Test implements CommandLineRunner {
     @Value("${adminPassword}")
     String adminPassword;
 
-    @Override
+   // @Override
     public void run(String... args) throws Exception {
 
         // adding admin user
