@@ -4,7 +4,10 @@ package com.example.demo.AppModules.company;
 
 import java.util.List;
 
+import com.example.demo.AppModules.user.User;
+import com.example.demo.AppModules.user.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +19,20 @@ public class CompanyServiceImp implements CompanyService {
     private CompanyRepository companyRepository;
 
     @Autowired
+    @Lazy
+    private UserServiceImp userService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     public Company addCompany(Company company) throws AppException {
+        //Save the user if it doesn't have an ID
+        if (company.getCompanyUser() != null && company.getCompanyUser().getId() == 0) {
+            User savedUser = userService.addUser(company.getCompanyUser());
+            company.setCompanyUser(savedUser);
+        }
+
         //company name and email should be unique
         if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);

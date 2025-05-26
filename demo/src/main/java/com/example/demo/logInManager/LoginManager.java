@@ -9,46 +9,60 @@ import com.example.demo.Facade.ClientFacade;
 import com.example.demo.Facade.CompanyFacade;
 import com.example.demo.Facade.CustomerFacade;
 
+import com.example.demo.Security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.AppModules.user.UserError;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class LoginManager {
-    private final UserServiceImp userServiceImp;
     private final AdminFacade adminFacade;
     private final CompanyFacade companyFacade;
     private final CustomerFacade customerFacade;
 
-    //init threw constructor to avoid using New
     @Autowired
-    public LoginManager(UserServiceImp userServiceImp, AdminFacade adminFacade, CompanyFacade companyFacade, CustomerFacade customerFacade) {
-        this.userServiceImp = userServiceImp;
+    public LoginManager(AdminFacade adminFacade, CompanyFacade companyFacade, CustomerFacade customerFacade) {
         this.adminFacade = adminFacade;
         this.companyFacade = companyFacade;
         this.customerFacade = customerFacade;
     }
 
+    // Called after Spring Security has authenticated the user
+    public void setUserContext(Authentication authentication) throws AppException {
+        if (authentication != null && authentication.isAuthenticated()) {
+            // Get the authenticated User from Spring Security
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            User user = userDetails.getUser();
 
-    public ClientFacade login(String email, String password, String userType) throws AppException {
-        User user = userServiceImp.getUserByEmailAndPassword(email, password);
-        if(user.getUserType() != UserType.valueOf(userType)){
-            throw new AppException(UserError.USER_TYPE_INCURRECT);
-        }
-        if(user != null){
-            switch(user.getUserType()){
+            // This part is similar to your LoginManager's switch statement
+            switch (user.getUserType()) {
                 case ADMIN:
                     adminFacade.setUserLogin(user);
-                    return adminFacade;
+                    break;
                 case COMPANY:
-                    companyFacade.setUserLogin(user);
-                    return companyFacade;
+                    companyFacade.setUserLoginAndCompany(user);
+                    break;
                 case CUSTOMER:
-                    customerFacade.setUserLogin(user);
-                    return customerFacade;
-                }
-            } return null;
+                    customerFacade.setUserLoginAndCustomer(user);
+                    break;
+            }
         }
-    
+    }
+
+    // Optional: Get the appropriate facade based on user type
+    public ClientFacade getFacadeForUserType(UserType userType) {
+        switch (userType) {
+            case ADMIN:
+                return adminFacade;
+            case COMPANY:
+                return companyFacade;
+            case CUSTOMER:
+                return customerFacade;
+            default:
+                return null;
+        }
+    }
 }

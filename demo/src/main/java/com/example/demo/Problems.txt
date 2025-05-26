@@ -1,4 +1,51 @@
-CIRCULAR DEPENDENCY WHEN autH ADMIN
-1. seperate userDerailes service from user
-2. fix DaoAuthenticationProvider and AuthenticationManager
-3. create a CustomAuthenticationProvider  for ADMIN user
+
+add Contollers
+
+V - ADMIN
+COMPANY
+CUSTOMER
+
+use the FACADE services, here is an example of API:
+
+@RestController
+@RequestMapping("/api/admin")
+public class AdminController {
+
+    @Autowired
+    private AdminFacade adminFacade;
+
+    @GetMapping("/companies")
+    public ResponseEntity<?> getAllCompanies() {
+        try {
+            // Simply use the adminFacade - it's already set up by the filter
+            List<Company> companies = adminFacade.getAllCompanies();
+            return ResponseEntity.ok(companies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error fetching companies: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/companies")
+    public ResponseEntity<?> addCompany(@RequestBody Company company) {
+        try {
+            // The adminFacade is already set up with the current user
+            Company newCompany = adminFacade.addCompany(company);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newCompany);
+        } catch (AppException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/companies/{id}")
+    public ResponseEntity<?> getCompanyById(@PathVariable int id) {
+        try {
+            // Simply use the adminFacade methods
+            Company company = adminFacade.getCompanyById(id);
+            return ResponseEntity.ok(company);
+        } catch (AppException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Company not found: " + e.getMessage());
+        }
+    }
+}

@@ -1,8 +1,10 @@
 package com.example.demo.AppModules.customer;
 
 import com.example.demo.AppModules.user.User;
+import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.Error.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +14,17 @@ public class CustomerServiceImp implements CustomerService{
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    @Lazy
+    private UserServiceImp userService;
+
     @Override
     public Customer addCustomer(Customer customer) throws AppException {
+        if (customer.getUser() != null && customer.getUser().getId() == 0){
+            User userSaved = userService.addUser(customer.getUser());
+            customer.setUser(userSaved);
+        }
+
         if(this.customerRepository.existsById(customer.getId())){
             throw new AppException(CustomerError.CUSTOMER_ALREADY_EXIST);
         }
