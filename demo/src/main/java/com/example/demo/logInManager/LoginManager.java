@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoginManager {
+
+    //Class not actually in use anymore
+
     private final AdminFacade adminFacade;
     private final CompanyFacade companyFacade;
     private final CustomerFacade customerFacade;

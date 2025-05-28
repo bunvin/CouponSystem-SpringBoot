@@ -37,4 +37,11 @@ public class CustomerController {
         List<Coupon> coupons = customerFacade.getAllCustomerCouponsByMaxPrice(maxPrice);
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
+
+    @PostMapping("/coupons/{id}")
+    public ResponseEntity<Void> addCouponPurchases(@PathVariable int id) throws AppException {
+        customerFacade.addCouponPurchases(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
