@@ -13,7 +13,7 @@ class UserService {
     // }
 
     async login(user: User): Promise<User> {
-        const response = await axios.post<User>(appConfig.apiAddress + '/login', user);
+        const response = await axios.post<User>(appConfig.apiAddress + '/auth/login', user);
         authStore.dispatch({type: AuthActionType.Registration, payload: response.data});
         return response.data;
     }

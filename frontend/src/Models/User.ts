@@ -1,11 +1,9 @@
 
 
 interface User {
-    firstName: string,
-    lastName: string,
-    username: string,
+    email: string,
     password: string,
-    role: string,
+    userType: string,
     id?: number,
     companyId?: number,
     userId?: number

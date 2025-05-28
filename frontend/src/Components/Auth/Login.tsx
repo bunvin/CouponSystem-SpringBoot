@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import User from '../../Models/User';
 import UserService from '../../Services/UserService';
+import ROLES from '../Constants';
 
 
 function Login(): JSX.Element {
@@ -20,19 +21,29 @@ function Login(): JSX.Element {
   return (
     <form onSubmit={handleSubmit(send)} className="my-form">
       <div className="form-group">
-        <label htmlFor="username">User Name</label>
-        <input type="text" id="userName" placeholder="Enter user name"
-          {...register("username", {
+        <label htmlFor="email">Email: </label>
+        <input type="text" id="email" placeholder="Enter email "
+          {...register("email", {
             required: { value: true, message: 'Required' },
             minLength: { value: 3, message: 'Must contain at least 3 characters' }
           })} />
-        {formState.errors.username && <span className="error-message">{formState.errors.username?.message}</span>}
+        {formState.errors.email && <span className="error-message">{formState.errors.email?.message}</span>}
       </div>
 
       <div className="form-group">
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password: </label>
         <input type="password" id="password" placeholder="Enter password"
           {...register("password", {
+            required: { value: true, message: 'Required' },
+            minLength: { value: 5, message: 'Must contain at least 5 characters' }
+          })} />
+        {formState.errors.password && <span className="error-message">{formState.errors.password?.message}</span>}
+      </div>
+
+            <div className="form-group">
+        <label htmlFor="userType">Role: </label>
+        <input type="userType" id="userType" placeholder="Enter userType"
+          {...register("userType", {
             required: { value: true, message: 'Required' },
             minLength: { value: 5, message: 'Must contain at least 5 characters' }
           })} />

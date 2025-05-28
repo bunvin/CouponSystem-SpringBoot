@@ -1,16 +1,12 @@
 package com.example.demo.Security;
 
-import com.example.demo.Facade.AdminFacade;
-import com.example.demo.Facade.CompanyFacade;
-import com.example.demo.Facade.CustomerFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +16,13 @@ import com.example.demo.AppModules.user.User;
 import com.example.demo.AppModules.user.UserError;
 import com.example.demo.AppModules.user.UserService;
 import com.example.demo.Error.AppException;
+import com.example.demo.Facade.AdminFacade;
+import com.example.demo.Facade.CompanyFacade;
+import com.example.demo.Facade.CustomerFacade;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
 
     @Autowired

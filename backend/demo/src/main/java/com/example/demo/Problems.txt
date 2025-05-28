@@ -9,6 +9,7 @@ use the FACADE services, here is an example of API:
 
 @RestController
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
 
     @Autowired

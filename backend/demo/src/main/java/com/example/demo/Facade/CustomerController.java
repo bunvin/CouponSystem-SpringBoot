@@ -1,23 +1,27 @@
 package com.example.demo.Facade;
 
-import com.example.demo.AppModules.coupon.Category;
-import com.example.demo.AppModules.coupon.Coupon;
-import com.example.demo.Error.AppException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.example.demo.AppModules.coupon.Category;
+import com.example.demo.AppModules.coupon.Coupon;
+import com.example.demo.Error.AppException;
 
 @RestController
 @RequestMapping("/api/customer")
+@CrossOrigin(origins = "http://localhost:3000")
 public class CustomerController {
     @Autowired
     private CustomerFacade customerFacade;
-
-    @PostMapping()
-
 
 
     @GetMapping("/coupons")
