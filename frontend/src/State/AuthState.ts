@@ -7,11 +7,11 @@ export class AuthState {
     user: User | null = null;
 
     constructor() {
-        // const token: string | null = localStorage.getItem("token");
-        // if (token) {
-        //     this.user = jwtDecode(token);
-        //     this.token = token;
-        // }
+        const token: string | null = localStorage.getItem("token");
+        if (token) {
+            this.user = jwtDecode(token);
+            this.token = token;
+        }
         const userJson: string | null = localStorage.getItem("user");
         if (userJson) {
             this.user = JSON.parse(userJson);
@@ -20,7 +20,7 @@ export class AuthState {
 }
 
 export enum AuthActionType {
-    Registration = "Registration",
+    //Registration = "Registration",
     Login = "Login",
     Logout = "Logout"
 }
@@ -35,18 +35,18 @@ export function reducer(authState: AuthState = new AuthState(), action: AuthActi
     const newState: AuthState = { ...authState };
 
     switch (action.type) {
-        case AuthActionType.Registration:
+        //case AuthActionType.Registration:
         case AuthActionType.Login:
-            // localStorage.setItem("token", action.payload);
-            // newState.token = action.payload;
-            // newState.user = jwtDecode(action.payload);
+            localStorage.setItem("token", action.payload);
+            newState.token = action.payload;
+            newState.user = jwtDecode(action.payload);
             localStorage.setItem("user", JSON.stringify(action.payload));
             newState.user = action.payload;
             break;
         case AuthActionType.Logout:
             newState.token = null;
             newState.user = null;
-            // localStorage.removeItem("token");
+            localStorage.removeItem("token");
             localStorage.removeItem("user");
     }
 

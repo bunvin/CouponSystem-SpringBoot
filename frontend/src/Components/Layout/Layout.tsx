@@ -1,5 +1,6 @@
-import { JSX } from "react";
+import React from "react";
 import Login from "../Auth/Login";
+import { JSX } from "react/jsx-runtime";
 
 
 function Layout(): JSX.Element {
