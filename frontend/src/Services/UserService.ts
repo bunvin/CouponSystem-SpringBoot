@@ -3,6 +3,7 @@ import User from "../Models/User";
 import appConfig from "../Config/AppConfig";
 import authService from "./AuthService";
 import { AuthActionType, authStore } from "../State/AuthState";
+import { jwtDecode } from "jwt-decode";
 
 class UserService {
 
@@ -13,9 +14,10 @@ class UserService {
     // }
 
     async login(user: User): Promise<User> {
-        const response = await axios.post<User>(appConfig.apiAddress + '/auth/login', user);
-        authStore.dispatch({type: AuthActionType.Registration, payload: response.data});
-        return response.data;
+        const response = await axios.post<{token: string}>(appConfig.apiAddress + '/auth/login', user);
+        const token = response.data.token;
+        authStore.dispatch({type: AuthActionType.Login, payload: token});
+        return jwtDecode(token);
     }
 
     // async getUserList(): Promise<User[]> {

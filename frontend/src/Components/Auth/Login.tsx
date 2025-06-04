@@ -10,13 +10,8 @@ function Login(): JSX.Element {
   const { register, handleSubmit, formState } = useForm<User>();
 
   async function send(user: User): Promise<void> {
-    try {
-      await UserService.login(user);
-      navigate('/task-list');
-    } catch (error) {
-      console.error('Login failed:', error);
-      // Handle login error (show message to user, etc.)
-    }
+    await UserService.login(user);
+      navigate('login'); 
   }
 
   return (
@@ -76,9 +71,7 @@ function Login(): JSX.Element {
         )}
       </div>
 
-      <button type="submit" disabled={formState.isSubmitting}>
-        {formState.isSubmitting ? 'Logging in...' : 'Login'}
-      </button>
+      <button>Login</button>
 
       <div className="demo-credentials">
         <p><strong>Credentials:</strong></p>

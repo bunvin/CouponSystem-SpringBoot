@@ -1,6 +1,7 @@
 import React from "react";
 import Login from "../Auth/Login";
 import { JSX } from "react/jsx-runtime";
+import AdminMenu from "./AdminMenu";
 
 
 function Layout(): JSX.Element {
@@ -10,6 +11,7 @@ function Layout(): JSX.Element {
             </header>
             <div className='content'>
                 <menu>
+                    <AdminMenu />
                 </menu>
                 <main>
                   <Login />

@@ -37,17 +37,21 @@ export function reducer(authState: AuthState = new AuthState(), action: AuthActi
     switch (action.type) {
         //case AuthActionType.Registration:
         case AuthActionType.Login:
-            localStorage.setItem("token", action.payload);
-            newState.token = action.payload;
-            newState.user = jwtDecode(action.payload);
-            localStorage.setItem("user", JSON.stringify(action.payload));
-            newState.user = action.payload;
+            if (typeof action.payload === 'string') {
+                //JWT token
+                localStorage.setItem("token", action.payload);
+                newState.token = action.payload;
+                newState.user = jwtDecode(action.payload);
+                localStorage.setItem("user", JSON.stringify(newState.user));
+            } 
             break;
+
         case AuthActionType.Logout:
             newState.token = null;
             newState.user = null;
             localStorage.removeItem("token");
             localStorage.removeItem("user");
+            break;
     }
 
     return newState;

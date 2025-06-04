@@ -5,11 +5,11 @@ import { AuthActionType, authStore } from "../State/AuthState";
 
 class AuthService {
 
-    async register(user: User): Promise<void> {
-        const response = await axios.post<{token: string}>(appConfig.apiAddress + '/auth', user);
-        const tokenResponse: {token: string} = response.data;
-        authStore.dispatch({type: AuthActionType.Registration, payload: tokenResponse.token});
-    }
+    // async register(user: User): Promise<void> {
+    //     const response = await axios.post<{token: string}>(appConfig.apiAddress + '/auth', user);
+    //     const tokenResponse: {token: string} = response.data;
+    //     authStore.dispatch({type: AuthActionType.Registration, payload: tokenResponse.token});
+    // }
 
 }
 
