@@ -2,8 +2,7 @@ import { JSX } from "react";
 
 function AdminMenu(): JSX.Element {
 return <div>
-    <p>new company</p>
-    <p>new customer</p>
+    <p>Add-New</p>
     <p>company list</p>
     <p>customer list</p>
 

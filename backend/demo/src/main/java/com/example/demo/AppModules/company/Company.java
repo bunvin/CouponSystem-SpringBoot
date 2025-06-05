@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.user.User;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,6 +30,7 @@ public class Company implements Serializable {
     @Column(updatable = false)
     String name;
 
+    @JsonProperty("user")
     @OneToOne
     @JoinColumn(name = "user_id", updatable = false)
     private User user;
@@ -93,7 +95,7 @@ public class Company implements Serializable {
         this.name = name;
     }
 
-    public void setCompanyUser(User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
@@ -109,7 +111,7 @@ public class Company implements Serializable {
         return name;
     }
 
-    public User getCompanyUser() {
+    public User getUser() {
         return user;
     }
 

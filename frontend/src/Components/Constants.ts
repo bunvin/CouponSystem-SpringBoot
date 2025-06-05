@@ -1,6 +1,9 @@
 
-const ROLES: string[] = ["ADMIN", "COMPANY", "CUSTOMER"];
-export { ROLES };
+export enum ROLES {
+    ADMIN = "ADMIN",
+    COMPANY = "COMPANY", 
+    CUSTOMER = "CUSTOMER"
+}
 
 const CATEGORIES: string[] = ["FOOD", "ELECTRICITY", "RESTAURANT", "VACATION"];
 export { CATEGORIES };

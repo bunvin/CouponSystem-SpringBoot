@@ -2,6 +2,7 @@ import React from "react";
 import Login from "../Auth/Login";
 import { JSX } from "react/jsx-runtime";
 import AdminMenu from "./AdminMenu";
+import Routing from "../Routing/Routing";
 
 
 function Layout(): JSX.Element {
@@ -14,7 +15,7 @@ function Layout(): JSX.Element {
                     <AdminMenu />
                 </menu>
                 <main>
-                  <Login />
+                  <Routing />
                 </main>
             </div>
             <footer>

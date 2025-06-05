@@ -4,13 +4,13 @@ package com.example.demo.AppModules.company;
 
 import java.util.List;
 
-import com.example.demo.AppModules.user.User;
-import com.example.demo.AppModules.user.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.AppModules.user.User;
+import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.Error.AppException;
 
 @Service
@@ -28,16 +28,16 @@ public class CompanyServiceImp implements CompanyService {
     @Override
     public Company addCompany(Company company) throws AppException {
         //Save the user if it doesn't have an ID
-        if (company.getCompanyUser() != null && company.getCompanyUser().getId() == 0) {
-            User savedUser = userService.addUser(company.getCompanyUser());
-            company.setCompanyUser(savedUser);
+        if (company.getUser() != null && company.getUser().getId() == 0) {
+            User savedUser = userService.addUser(company.getUser());
+            company.setUser(savedUser);
         }
 
         //company name and email should be unique
         if(this.companyRepository.existsByName(company.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_ALREADY_EXISTS);
         }
-        if(this.companyRepository.existsByUserEmail(company.getCompanyUser().getEmail())){
+        if(this.companyRepository.existsByUserEmail(company.getUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_ALREADY_EXISTS);
         }
 
@@ -52,11 +52,11 @@ public class CompanyServiceImp implements CompanyService {
         if(!company.getName().equals(dbCompany.getName())){
             throw new AppException(CompanyError.COMPANY_NAME_IS_UNUPDATABLE);
         }
-        if(!company.getCompanyUser().getEmail()
-                .equals(dbCompany.getCompanyUser().getEmail())){
+        if(!company.getUser().getEmail()
+                .equals(dbCompany.getUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_IS_UNUPDATABLE);
         }
-        company.setCompanyUser(dbCompany.getCompanyUser()); 
+        company.setUser(dbCompany.getUser()); 
         company.setId(dbCompany.getId());
 
         this.companyRepository.save(company);

@@ -11,7 +11,7 @@ function Login(): JSX.Element {
 
   async function send(user: User): Promise<void> {
     await AuthService.login(user);
-      navigate('login'); 
+      navigate('/addNew'); 
   }
 
   return (
@@ -60,7 +60,7 @@ function Login(): JSX.Element {
           })}
         >
           <option value="">Select a role</option>
-          {ROLES.map((role) => (
+          {Object.values(ROLES).map((role) => (
             <option key={role} value={role}>
               {role}
             </option>

@@ -84,7 +84,7 @@ public class CompanyFacade extends ClientFacade{
         System.out.println("##### Company Details #####");
         System.out.println("CompanyId: "+company.getId());
         System.out.println("Company Name: "+ company.getName());
-        System.out.println("Company Email: "+ company.getCompanyUser().getEmail());
+        System.out.println("Company Email: "+ company.getUser().getEmail());
         System.out.println("Company coupons: ");
         List<Coupon> coupons = this.getAllCompanyCoupons();
         for(Coupon coupon:coupons){

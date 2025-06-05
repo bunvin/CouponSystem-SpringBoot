@@ -5,6 +5,29 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Layout from './Components/Layout/Layout';
 import { BrowserRouter } from 'react-router-dom';
+import axios from 'axios';
+
+axios.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// if Token expired or unauthorized >> login page
+axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+           
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

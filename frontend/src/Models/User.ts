@@ -1,13 +1,9 @@
-export enum Type {
-    ADMIN = "ADMIN",
-    COMPANY = "COMPANY",
-    CUSTOMER = "CUSTOMER"
-}
+import { ROLES } from "../Components/Constants";
 
 interface User {
     email: string,
     password: string,
-    userType: Type,
+    userType: ROLES,
     id?: number,
     companyId?: number,
     userId?: number

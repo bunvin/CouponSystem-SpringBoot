@@ -1,17 +1,26 @@
 package com.example.demo;
 
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.*;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import com.example.demo.AppModules.company.Company;
 import com.example.demo.AppModules.customer.Customer;
@@ -19,10 +28,6 @@ import com.example.demo.AppModules.user.User;
 import com.example.demo.AppModules.user.UserType;
 import com.example.demo.Security.LoginRequest;
 import com.example.demo.Security.TokenResponse;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.UUID;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
@@ -91,7 +96,7 @@ public class JwtAuthenticationTests {
         // Create a company
         Company company = new Company();
         company.setName("Test Company " + UUID.randomUUID().toString().substring(0, 8));
-        company.setCompanyUser(companyUser);
+        company.setUser(companyUser);
 
         // Make request
         HttpEntity<Company> request = new HttpEntity<>(company, headers);
