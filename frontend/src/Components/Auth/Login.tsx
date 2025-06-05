@@ -2,15 +2,15 @@ import React, { JSX } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import User from '../../Models/User';
-import UserService from '../../Services/UserService';
-import ROLES from '../Constants';
+import AuthService from '../../Services/AuthService';
+import { ROLES } from '../Constants';
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
   const { register, handleSubmit, formState } = useForm<User>();
 
   async function send(user: User): Promise<void> {
-    await UserService.login(user);
+    await AuthService.login(user);
       navigate('login'); 
   }
 
@@ -75,7 +75,8 @@ function Login(): JSX.Element {
 
       <div className="demo-credentials">
         <p><strong>Credentials:</strong></p>
-        <p>Admin - Email: admin@admin.com, Password: admin, Role: ADMIN</p>
+        <p>Admin - Email: admin@admin.com, Password: admin</p>
+        <p>Company - Email: company_d4d@test.com, Password: password123</p>
       </div>
     </form>
   );

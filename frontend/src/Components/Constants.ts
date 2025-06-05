@@ -1,3 +1,6 @@
 
 const ROLES: string[] = ["ADMIN", "COMPANY", "CUSTOMER"];
-export default ROLES;
+export { ROLES };
+
+const CATEGORIES: string[] = ["FOOD", "ELECTRICITY", "RESTAURANT", "VACATION"];
+export { CATEGORIES };

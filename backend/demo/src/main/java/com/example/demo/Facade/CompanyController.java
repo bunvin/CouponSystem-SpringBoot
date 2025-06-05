@@ -33,7 +33,7 @@ public class CompanyController {
     }
 
     @GetMapping("/coupons/category/{category}")
-    public ResponseEntity<List<Coupon>> getAllCompanyCoupons(@PathVariable Category category) throws AppException {
+    public ResponseEntity<List<Coupon>> getAllCompanyCouponsByCategory(@PathVariable Category category) throws AppException {
         List<Coupon> coupons = companyFacade.getAllCompanyCouponsByCategory(category);
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
@@ -44,7 +44,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
 
-    @PostMapping("/coupon")
+    @PostMapping("/coupons")
     public ResponseEntity<Coupon> addCoupon(@RequestBody Coupon coupon) throws AppException {
         Coupon newCoupon = companyFacade.addCoupon(coupon);
         return ResponseEntity.status(HttpStatus.OK).body(newCoupon);
@@ -56,13 +56,13 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body(coupon);
     }
 
-    @PostMapping("/coupon/{id}")
+    @PostMapping("/coupons/{id}")
     public ResponseEntity<Void> updateCoupon(@RequestBody Coupon coupon, @PathVariable int id) throws AppException {
         companyFacade.updateCoupon(coupon, id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/coupon/{id}")
+    @DeleteMapping("/coupons/{id}")
     public ResponseEntity<Void> deleteCoupon(@PathVariable int id) throws AppException {
         companyFacade.deleteCoupon(id);
         return ResponseEntity.ok().build();
