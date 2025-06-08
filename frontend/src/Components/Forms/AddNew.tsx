@@ -1,9 +1,10 @@
 import { JSX, useState } from "react";
-import Company from "../Models/Company";
-import Customer from "../Models/Customer";
 import { useForm } from "react-hook-form";
-import adminService from "../Services/AdminService";
-import { ROLES } from "./Constants";
+import { ROLES } from '../Constants'
+import Company from "../../Models/Company";
+import Customer from "../../Models/Customer";
+import adminService from "../../Services/AdminService";
+
 
 function AddNew(): JSX.Element {
     const companyForm = useForm<Company>();
