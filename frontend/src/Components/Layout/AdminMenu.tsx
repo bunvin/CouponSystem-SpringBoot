@@ -1,10 +1,10 @@
 import { JSX } from "react";
+import { NavLink } from "react-router-dom";
 
 function AdminMenu(): JSX.Element {
 return <div>
-    <p>Add-New</p>
-    <p>company list</p>
-    <p>customer list</p>
+    <NavLink to = "/add-new">Add-New</NavLink>
+    <NavLink to = "/show-all">Show all : company & customer </NavLink>
 
 </div>;
 }
