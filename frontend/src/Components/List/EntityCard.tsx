@@ -126,7 +126,7 @@ function EntityCard({ entity, type, onDelete }: EntityCardProps): JSX.Element {
     }
 
     async function onUpdate(id: number): Promise<void> {
-        navigate(`/${type}-details/${id}`);
+        navigate(`/${type}/${id}`);
     }
 
     // Fixed onCard function - simply toggles the selection state
