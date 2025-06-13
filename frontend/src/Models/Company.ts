@@ -1,8 +1,10 @@
-import User from "./User"
+import { CATEGORIES } from '../Components/Constants';
+import User from "./User";
 
 interface Company {
     name: string,
     user: User,
+    category: CATEGORIES,
     id?: number
 }
 

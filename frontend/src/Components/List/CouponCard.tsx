@@ -132,7 +132,11 @@ function CouponCard({
     }
 
     function renderCouponContent() {
+                    // Add this debug line to see what's actually in the coupon object
+            console.log("Coupon object:", coupon);
+            console.log("Category value:", coupon.category);
         return (
+            
             <div className="card-content">
                 <h2 className="card-title">{coupon.title}</h2>
                 <div className="card-details">

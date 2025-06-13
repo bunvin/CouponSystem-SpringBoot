@@ -1,7 +1,9 @@
 package com.example.demo.AppModules.customer;
 
+import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -123,6 +125,16 @@ public class Customer implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    @JsonIgnore
+    public List<CustomerCoupon> getPurchases() {
+        return purchases;
+    }
+
+    @JsonIgnore
+    public void setPurchases(List<CustomerCoupon> purchases) {
+        this.purchases = purchases;
     }
 
 

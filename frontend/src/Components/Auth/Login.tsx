@@ -11,7 +11,7 @@ function Login(): JSX.Element {
 
   async function send(user: User): Promise<void> {
     await AuthService.login(user);
-      navigate('/addNew'); 
+      navigate('/show-all'); 
   }
 
   return (
@@ -77,6 +77,7 @@ function Login(): JSX.Element {
         <p><strong>Credentials:</strong></p>
         <p>Admin - Email: admin@admin.com, Password: admin</p>
         <p>Company - Email: company_d4d@test.com, Password: password123</p>
+        <p>Customer - email: mario@gmail.com, Password: Password123</p>
       </div>
     </form>
   );

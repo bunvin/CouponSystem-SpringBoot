@@ -23,10 +23,15 @@ public class CustomerController {
     @Autowired
     private CustomerFacade customerFacade;
 
-
     @GetMapping("/coupons")
+    public ResponseEntity<List<Coupon>> getAllCoupons() throws AppException {
+        List<Coupon> coupons = customerFacade.getAllCoupons();
+        return ResponseEntity.status(HttpStatus.OK).body(coupons);
+    }
+
+    @GetMapping("/coupons/{id}")
     public ResponseEntity<List<Coupon>> getAllCustomerCoupons() throws AppException {
-        List<Coupon> coupons = customerFacade.getAllCustomerCoupons();
+        List<Coupon> coupons = customerFacade.getAllCustomerCoupons(); //customer that is logged in
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
 

@@ -3,6 +3,7 @@
 package com.example.demo.AppModules.company;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,6 +24,7 @@ public class CompanyServiceImp implements CompanyService {
     private UserServiceImp userService;
 
     @Autowired
+    @Lazy
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -56,11 +58,22 @@ public class CompanyServiceImp implements CompanyService {
                 .equals(dbCompany.getUser().getEmail())){
             throw new AppException(CompanyError.COMPANY_EMAIL_IS_UNUPDATABLE);
         }
-        company.setUser(dbCompany.getUser()); 
+
+        company.setUser(dbCompany.getUser());
         company.setId(dbCompany.getId());
+        company.setCoupons(dbCompany.getCoupons()); // <- Add this line!
+
+        // Handle password update logic
+        if (company.getUser().getPassword() == null || company.getUser().getPassword().isEmpty()) {
+            company.getUser().setPassword(dbCompany.getUser().getPassword());
+        } else {
+            //Encode the new password if provided
+            company.getUser().setPassword(passwordEncoder.encode(company.getUser().getPassword()));
+        }
 
         this.companyRepository.save(company);
-}
+        }
+
 
     @Override
     public void deleteCompany(int companyId) throws AppException {

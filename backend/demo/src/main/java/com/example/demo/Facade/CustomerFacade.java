@@ -60,6 +60,10 @@ public class CustomerFacade extends ClientFacade{
         return getCouponServiceImp().getAllCouponsByCustomerIdAndMaxPrice(customer.getId(), maxPrice);
     }
 
+    public List<Coupon> getAllCoupons(){
+        return getCouponServiceImp().getAllCoupons();
+    }
+
     public void getCustomerDerails() throws AppException {
         System.out.println("#############");
         System.out.println("CustomerId: "+customer.getId());

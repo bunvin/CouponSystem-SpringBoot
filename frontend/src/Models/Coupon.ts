@@ -1,23 +1,17 @@
-import Company from './Company';
-
-export enum Category {
-    FOOD = "FOOD",
-    ELECTRICITY = "ELECTRICITY", 
-    RESTAURANT = "RESTAURANT",
-    VACATION = "VACATION"
-}
+import { CATEGORIES } from "../Components/Constants";
+import Company from "./Company";
 
 interface Coupon {
     id?: number;
-    company: Company;
-    category: Category;
+    company: Company; 
+    category: CATEGORIES;
     title: string;
     description: string;
-    startDate: string;  
-    endDate: string; 
+    startDate: string;
+    endDate: string;
     amount: number;
     price: number;
-    image?: string;
+    image: string;
 }
 
 export default Coupon;

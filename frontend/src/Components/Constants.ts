@@ -5,5 +5,4 @@ export enum ROLES {
     CUSTOMER = "CUSTOMER"
 }
 
-const CATEGORIES: string[] = ["FOOD", "ELECTRICITY", "RESTAURANT", "VACATION"];
-export { CATEGORIES };
+export enum CATEGORIES {"FOOD", "ELECTRICITY", "RESTAURANT", "VACATION"};

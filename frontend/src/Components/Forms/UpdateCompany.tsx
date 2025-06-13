@@ -1,3 +1,4 @@
+// UpdateCompany.tsx
 import { JSX, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useNavigate } from "react-router-dom";
@@ -14,6 +15,7 @@ function UpdateCompany(): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
+    const [changePassword, setChangePassword] = useState<boolean>(false);
 
     useEffect(() => {
         if (id) {
@@ -30,9 +32,9 @@ function UpdateCompany(): JSX.Element {
             const company = await adminService.getCompanyById(companyId);
             companyForm.reset(company);
             
-        } catch (err) {
+        } catch (err: any) {
             console.error("Error fetching company:", err);
-            setError("Failed to load company data. Please try again.");
+            setError(err.message || "Failed to load company data. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -41,15 +43,21 @@ function UpdateCompany(): JSX.Element {
     async function submitCompany(company: Company) {
         try {
             const companyId = parseInt(id!);
+            
+            // If password change is not requested, send empty string
+            if (!changePassword) {
+                company.user.password = "";
+            }
+            
             await adminService.updateCompany(company, companyId);
             setSuccess("Company updated successfully!");
             setTimeout(() => {
                 setSuccess("");
                 navigate('/show-all');
             }, 2000);
-        } catch (error) {
+        } catch (error: any) {
             console.error("Error updating company:", error);
-            setError("Error updating company. Please try again.");
+            setError(error.message || "Failed to update company data. Please try again.");
         }
     }
 
@@ -106,19 +114,43 @@ function UpdateCompany(): JSX.Element {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="company-password">Password:</label>
-                        <input
-                            type="password"
-                            id="company-password"
-                            {...companyForm.register("user.password", {
-                                required: { value: true, message: "Password is required" },
-                                minLength: { value: 5, message: "Password must be at least 5 characters" }
-                            })}
-                        />
-                        {companyForm.formState.errors.user?.password && (
-                            <span className="error-message">{companyForm.formState.errors.user.password.message}</span>
-                        )}
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={changePassword}
+                                onChange={(e) => {
+                                    setChangePassword(e.target.checked);
+                                    if (!e.target.checked) {
+                                        // Clear password field when unchecked
+                                        companyForm.setValue("user.password", "");
+                                        companyForm.clearErrors("user.password");
+                                    } else {
+                                        // Clear password field when checked to ensure it's empty
+                                        companyForm.setValue("user.password", "");
+                                    }
+                                }}
+                            />
+                            Change Password
+                        </label>
                     </div>
+
+                    {changePassword && (
+                        <div className="form-group">
+                            <label htmlFor="company-password">New Password:</label>
+                            <input
+                                type="password"
+                                id="company-password"
+                                defaultValue=""
+                                {...companyForm.register("user.password", {
+                                    required: changePassword ? { value: true, message: "New password is required" } : false,
+                                    minLength: changePassword ? { value: 5, message: "Password must be at least 5 characters" } : undefined
+                                })}
+                            />
+                            {companyForm.formState.errors.user?.password && (
+                                <span className="error-message">{companyForm.formState.errors.user.password.message}</span>
+                            )}
+                        </div>
+                    )}
 
                     <input
                         type="hidden"

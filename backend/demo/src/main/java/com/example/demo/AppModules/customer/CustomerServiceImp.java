@@ -5,9 +5,11 @@ import com.example.demo.AppModules.user.UserServiceImp;
 import com.example.demo.Error.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CustomerServiceImp implements CustomerService{
@@ -17,6 +19,11 @@ public class CustomerServiceImp implements CustomerService{
     @Autowired
     @Lazy
     private UserServiceImp userService;
+
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
+
 
     @Override
     public Customer addCustomer(Customer customer) throws AppException {
@@ -42,8 +49,21 @@ public class CustomerServiceImp implements CustomerService{
 
     @Override
     public void updateCustomer(Customer customer, int customerId) throws AppException {
-        Customer fromDB = this.getSingleCustomer(customerId);
-        customer.setId(fromDB.getId());
+        Customer dbCustomer = this.getSingleCustomer(customerId);
+
+        // Preserve existing relationships and IDs
+        customer.setUser(dbCustomer.getUser());
+        customer.setId(dbCustomer.getId());
+        customer.setPurchases(dbCustomer.getPurchases()); // Now this will work!
+
+        // Handle password update logic
+        if (customer.getUser().getPassword() == null || customer.getUser().getPassword().isEmpty()) {
+            customer.getUser().setPassword(dbCustomer.getUser().getPassword());
+        } else {
+            // Encode the new password
+            customer.getUser().setPassword(passwordEncoder.encode(customer.getUser().getPassword()));
+        }
+
         this.customerRepository.save(customer);
     }
 

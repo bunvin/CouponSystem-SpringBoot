@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.user.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -113,6 +114,16 @@ public class Company implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    @JsonIgnore
+    public List<Coupon> getCoupons() {
+        return coupons;
+    }
+
+    @JsonIgnore
+    public void setCoupons(List<Coupon> coupons) {
+        this.coupons = coupons;
     }
 
     public LocalDateTime getCreatedDateTime() {

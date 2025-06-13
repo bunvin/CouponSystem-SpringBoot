@@ -6,7 +6,9 @@ interface User {
     userType: ROLES,
     id?: number,
     companyId?: number,
+    companyName?: string,
     userId?: number
+    
 }
 
 export default User;

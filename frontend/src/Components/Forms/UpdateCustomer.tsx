@@ -14,6 +14,7 @@ function UpdateCustomer(): JSX.Element {
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
+    const [changePassword, setChangePassword] = useState<boolean>(false);
 
     useEffect(() => {
         if (id) {
@@ -41,6 +42,12 @@ function UpdateCustomer(): JSX.Element {
     async function submitCustomer(customer: Customer) {
         try {
             const customerId = parseInt(id!);
+            
+            // If password change is not requested, send empty string
+            if (!changePassword) {
+                customer.user.password = "";
+            }
+            
             await adminService.updateCustomer(customer, customerId);
             setSuccess("Customer updated successfully!");
             setTimeout(() => {
@@ -120,19 +127,43 @@ function UpdateCustomer(): JSX.Element {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="customer-password">Password:</label>
-                        <input
-                            type="password"
-                            id="customer-password"
-                            {...customerForm.register("user.password", {
-                                required: { value: true, message: "Password is required" },
-                                minLength: { value: 5, message: "Password must be at least 5 characters" }
-                            })}
-                        />
-                        {customerForm.formState.errors.user?.password && (
-                            <span className="error-message">{customerForm.formState.errors.user.password.message}</span>
-                        )}
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={changePassword}
+                                onChange={(e) => {
+                                    setChangePassword(e.target.checked);
+                                    if (!e.target.checked) {
+                                        // Clear password field when unchecked
+                                        customerForm.setValue("user.password", "");
+                                        customerForm.clearErrors("user.password");
+                                    } else {
+                                        // Clear password field when checked to ensure it's empty
+                                        customerForm.setValue("user.password", "");
+                                    }
+                                }}
+                            />
+                            Change Password
+                        </label>
                     </div>
+
+                    {changePassword && (
+                        <div className="form-group">
+                            <label htmlFor="customer-password">New Password:</label>
+                            <input
+                                type="password"
+                                id="customer-password"
+                                defaultValue=""
+                                {...customerForm.register("user.password", {
+                                    required: changePassword ? { value: true, message: "New password is required" } : false,
+                                    minLength: changePassword ? { value: 5, message: "Password must be at least 5 characters" } : undefined
+                                })}
+                            />
+                            {customerForm.formState.errors.user?.password && (
+                                <span className="error-message">{customerForm.formState.errors.user.password.message}</span>
+                            )}
+                        </div>
+                    )}
 
                     <input
                         type="hidden"

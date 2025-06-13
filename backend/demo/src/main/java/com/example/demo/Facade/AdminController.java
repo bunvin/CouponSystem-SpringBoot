@@ -40,8 +40,8 @@ public class AdminController {
     }
 
     @PostMapping("/companies/{id}")
-    public ResponseEntity<Void> updateCompany(@RequestBody Company company, @PathVariable int companyId) throws AppException {
-        adminFacade.updateCompany(company, companyId);
+    public ResponseEntity<Void> updateCompany(@RequestBody Company company, @PathVariable int id) throws AppException {
+        adminFacade.updateCompany(company, id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
