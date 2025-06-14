@@ -8,6 +8,7 @@ interface User {
     companyId?: number,
     companyName?: string,
     userId?: number
+    customerId?: number,
     
 }
 

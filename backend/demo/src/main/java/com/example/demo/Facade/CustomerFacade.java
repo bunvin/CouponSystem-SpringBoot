@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.example.demo.AppModules.coupon.Category;
 import com.example.demo.AppModules.coupon.Coupon;
 import com.example.demo.AppModules.customer.Customer;
-import com.example.demo.AppModules.customerCoupon.CustomerCoupon;
 import com.example.demo.AppModules.user.User;
 import com.example.demo.Error.AppException;
 
@@ -44,8 +43,12 @@ public class CustomerFacade extends ClientFacade{
 
 
 
-    public CustomerCoupon addCouponPurchases(int couponId) throws AppException {
-        return getCouponServiceImp().addCouponPurchase(customer.getId(), couponId);
+    public void addCouponPurchases(int couponId, int customerId) throws AppException {
+        getCouponServiceImp().addCouponPurchase(couponId, customerId);
+    }
+
+    public void deleteCouponPurchases(int customerId ,int couponId) throws AppException {
+        getCouponServiceImp().deleteCouponPurchase(customerId, couponId);
     }
 
     public List<Coupon> getAllCustomerCoupons() throws AppException {

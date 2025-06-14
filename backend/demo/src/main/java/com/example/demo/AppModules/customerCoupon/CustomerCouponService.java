@@ -13,7 +13,7 @@ public class CustomerCouponService {
     @Autowired
     private CustomerCouponRepository customerCouponRepository;
 
-    public CustomerCoupon addPurchase(Customer customer, Coupon coupon) throws AppException {
+    public CustomerCoupon addPurchase(Coupon coupon, Customer customer) throws AppException {
         if(this.customerCouponRepository.existsByCustomerIdAndCouponId(
                 customer.getId(), coupon.getId())){
             throw new AppException(CustomerCouponError.CUSTOMER_COUPON_ALREADY_EXIST);

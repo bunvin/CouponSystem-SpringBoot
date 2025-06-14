@@ -76,7 +76,7 @@ function Login(): JSX.Element {
       <div className="demo-credentials">
         <p><strong>Credentials:</strong></p>
         <p>Admin - Email: admin@admin.com, Password: admin</p>
-        <p>Company - Email: company_d4d@test.com, Password: password123</p>
+        <p>Company - Email: mi@gmail.com, Password: Password123</p>
         <p>Customer - email: mario@gmail.com, Password: Password123</p>
       </div>
     </form>

@@ -123,7 +123,7 @@ public class CouponServiceImp implements CouponService{
 
     @Transactional
     @Override
-    public CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException {
+    public CustomerCoupon addCouponPurchase(int couponId, int customerId) throws AppException {
         Coupon coupon = this.getSingleCoupon(couponId);
         //check amount
         if(coupon.getAmount()<1){
@@ -139,11 +139,11 @@ public class CouponServiceImp implements CouponService{
         }
         Customer customer = this.customerServiceImp.getSingleCustomer(customerId);
         coupon.setAmount(coupon.getAmount()-1);
-        return customerCouponService.addPurchase(customer,coupon);
+        return customerCouponService.addPurchase(coupon, customer);
     }
 
     @Override
-    public void deleteCouponPurchase(int customerId, int couponId) throws AppException {
+    public void deleteCouponPurchase(int couponId, int customerId) throws AppException {
         this.customerCouponService.deletePurchase(customerId,couponId); // exception if not found
     }
 

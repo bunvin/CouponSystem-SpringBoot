@@ -26,6 +26,8 @@ function Routing(): JSX.Element {
                 <Route path="/add-coupon" element={<RoutingGuard child={<AddNewCoupon />} requiredRole="COMPANY" />}/>
                 <Route path="/coupon/:id" element={<RoutingGuard child={<AddNewCoupon />} requiredRole="COMPANY" />}/>
 
+                {/* <Route path="/coupons/:id/customer/:customerId" element={<RoutingGuard child={<AddNewCoupon />} requiredRole="CUSTOMER" />}/> */}
+
             </Routes>
         </div>
     )

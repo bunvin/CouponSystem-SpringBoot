@@ -23,8 +23,8 @@ public interface CouponService {
     List<Coupon> getAllCouponsByCustomerIdAndCategory(int customerId, Category category) throws AppException;
 
     //CustomerCoupon
-    CustomerCoupon addCouponPurchase(int customerId, int couponId) throws AppException;
-    void deleteCouponPurchase(int customerId, int couponId) throws AppException;
+    CustomerCoupon addCouponPurchase(int couponId, int customerId) throws AppException;
+    void deleteCouponPurchase(int couponId, int customerId) throws AppException;
 
     //delete all expired coupons
     void deleteAllExpiredCoupons();

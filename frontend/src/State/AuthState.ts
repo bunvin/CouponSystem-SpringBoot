@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 export class AuthState {
     token: string | null = null;
     user: User | null = null;
-
+    
     constructor() {
         const token: string | null = localStorage.getItem("token");
         if (token) {

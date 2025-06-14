@@ -2,15 +2,16 @@ import { useNavigate } from 'react-router-dom';
 import { JSX, useState } from 'react';
 import { ROLES } from '../Constants';
 import Coupon from '../../Models/Coupon';
-import './EntityCard.css'; // Reusing the same CSS
+import { jwtDecode } from 'jwt-decode';
 
 interface CouponCardProps {
     coupon: Coupon;
     userRole: ROLES;
+    customerId?: number;
     onDelete?: (id: number) => void;
-    onBuy?: (id: number) => void;
-    onCancelBuy?: (id: number) => void;
-    isPurchased?: boolean; // For customer to know if they already bought this coupon
+    onBuy?: (couponId: number, customerId: number) => void;
+    onCancelBuy?: (couponId: number, customerId: number) => void;
+    isPurchased?: boolean; 
 }
 
 function CouponCard({ 
@@ -24,9 +25,26 @@ function CouponCard({
     const navigate = useNavigate();
     const [isSelected, setIsSelected] = useState<boolean>(false);
 
-    function getId(): number {
-        return coupon.id || 0;
-    }
+    const couponId = coupon.id || 0;
+
+    // Function to get customer ID from token
+    function getCustomerIdFromToken(): number | null {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("No token found in localStorage");
+            return null;
+        }
+        
+        try {
+            const decodedToken: any = jwtDecode(token);            
+            const customerId = decodedToken.customerId;            
+            return customerId || null;
+            
+        } catch (error) {
+            console.error("Error decoding token in CouponCard:", error);
+            return null;
+        }
+    };
 
     function onUpdate(id: number) {
         navigate(`/coupon/${id}`);
@@ -38,13 +56,23 @@ function CouponCard({
         }
     }
 
-    function handleBuy(id: number) {
-        onBuy?.(id);
+    function handleBuy() {
+        const customerId = getCustomerIdFromToken();
+        if (customerId) {
+            onBuy?.(couponId, customerId);
+        } else {
+            alert('Unable to purchase: Customer ID not found. Please log in again.');
+        }
     }
 
-    function handleCancelBuy(id: number) {
-        if (window.confirm('Are you sure you want to cancel the purchase of this coupon?')) {
-            onCancelBuy?.(id);
+    function handleCancelBuy() {
+        const customerId = getCustomerIdFromToken();
+        if (customerId) {
+            if (window.confirm('Are you sure you want to cancel the purchase of this coupon?')) {
+                onCancelBuy?.(couponId, customerId);
+            }
+        } else {
+            alert('Unable to cancel purchase: Customer ID not found. Please log in again.');
         }
     }
 
@@ -53,7 +81,7 @@ function CouponCard({
     }
 
     function getImageUrl(): string {
-        const id = getId();
+        const id = couponId;
         return coupon.image || `https://picsum.photos/200/300?random=coupon${id}`;
     }
 
@@ -67,7 +95,7 @@ function CouponCard({
                 <button 
                     onClick={(e) => {
                         e.stopPropagation();
-                        handleCancelBuy(getId());
+                        handleCancelBuy();
                     }}
                     className="remove-btn"
                 >
@@ -79,7 +107,7 @@ function CouponCard({
                 <button 
                     onClick={(e) => {
                         e.stopPropagation();
-                        handleBuy(getId());
+                        handleBuy();
                     }}
                     className="update-btn"
                 >
@@ -95,7 +123,7 @@ function CouponCard({
                 <button 
                     onClick={(e) => {
                         e.stopPropagation();
-                        handleDelete(getId());
+                        handleDelete(couponId);
                     }}
                     className="remove-btn"
                 >
@@ -104,7 +132,7 @@ function CouponCard({
                 <button 
                     onClick={(e) => {
                         e.stopPropagation();
-                        onUpdate(getId());
+                        onUpdate(couponId);
                     }}
                     className="update-btn"
                 >
@@ -132,13 +160,18 @@ function CouponCard({
     }
 
     function renderCouponContent() {
-                    // Add this debug line to see what's actually in the coupon object
-            console.log("Coupon object:", coupon);
-            console.log("Category value:", coupon.category);
+        
         return (
-            
             <div className="card-content">
                 <h2 className="card-title">{coupon.title}</h2>
+                
+                {/* Show company name prominently for customers */}
+                {userRole === ROLES.CUSTOMER && (
+                    <div className="company-badge">
+                        <span className="company-name">by {coupon.company.name}</span>
+                    </div>
+                )}
+                
                 <div className="card-details">
                     <p className="card-description">
                         <strong>Description:</strong> {coupon.description}
@@ -146,14 +179,19 @@ function CouponCard({
                     <p className="card-info">
                         <strong>Category:</strong> {coupon.category}
                     </p>
+                    
+                    {/* Show company name for admin and company roles */}
+                    {userRole !== ROLES.CUSTOMER && (
+                        <p className="card-info">
+                            <strong>Company:</strong> {coupon.company.name}
+                        </p>
+                    )}
+                    
                     <p className="card-info">
-                        <strong>Company:</strong> {coupon.company.name}
+                        <strong>Amount Available:</strong> {coupon.amount}
                     </p>
                     <p className="card-info">
-                        <strong>Amount:</strong> ${coupon.amount}
-                    </p>
-                    <p className="card-info">
-                        <strong>Price:</strong> ${coupon.price}
+                        <strong>Price:</strong> <span className="price-highlight">${coupon.price}</span>
                     </p>
                     <p className="card-info">
                         <strong>Valid From:</strong> {formatDate(coupon.startDate)}
