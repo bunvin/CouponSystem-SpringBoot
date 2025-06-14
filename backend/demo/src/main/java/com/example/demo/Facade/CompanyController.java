@@ -39,7 +39,7 @@ public class CompanyController {
     }
 
     @GetMapping("/coupons/max-price/{maxPrice}")
-    public ResponseEntity<List<Coupon>> getAllCompanyCoupons(@PathVariable double maxPrice) throws AppException {
+    public ResponseEntity<List<Coupon>> getAllCompanyCouponsUpToMaxPrice(@PathVariable double maxPrice) throws AppException {
         List<Coupon> coupons = companyFacade.getAllCompanyCouponsUpToMaxPrice(maxPrice);
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }

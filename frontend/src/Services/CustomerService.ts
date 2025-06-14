@@ -23,7 +23,7 @@ class CustomerService {
     }
 
     public async getAllCustomerCouponsUpToMaxPrice(maxprice: number): Promise<Coupon[]> {
-        const response = await axios.get<Coupon[]>(this.address+'/coupons/'+maxprice);
+        const response = await axios.get<Coupon[]>(this.address+'/coupons/max-price/'+maxprice);
         return response.data;
     }
 

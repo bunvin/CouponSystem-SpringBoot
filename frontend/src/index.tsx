@@ -8,6 +8,7 @@ import { BrowserRouter } from 'react-router-dom';
 import axios from 'axios';
 import { Provider } from 'react-redux';
 import { authStore } from './State/AuthState';
+import { listStore } from './State/ListState';
 
 axios.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
@@ -34,13 +35,15 @@ axios.interceptors.response.use(
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
+root.render( (
+  <Provider store={listStore}>
   <Provider store={authStore}>
   <BrowserRouter>
     <Layout />
   </BrowserRouter>
   </Provider>
-);
+  </Provider>
+));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

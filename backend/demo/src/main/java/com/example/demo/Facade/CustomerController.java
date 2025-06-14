@@ -35,13 +35,13 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
 
-    @GetMapping("/coupons/{category}")
+    @GetMapping("/coupons/category/{category}")
     public ResponseEntity<List<Coupon>> getAllCustomerCouponsByCategory(@PathVariable Category category) throws AppException {
         List<Coupon> coupons = customerFacade.getAllCustomerCouponsByCategory(category);
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
     }
 
-    @GetMapping("/coupons/{maxPrice}")
+    @GetMapping("/coupons/max-price/{maxPrice}")
     public ResponseEntity<List<Coupon>> getAllCustomerCouponsByMaxPrice(@PathVariable double maxPrice) throws AppException {
         List<Coupon> coupons = customerFacade.getAllCustomerCouponsByMaxPrice(maxPrice);
         return ResponseEntity.status(HttpStatus.OK).body(coupons);
