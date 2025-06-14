@@ -3,6 +3,7 @@ import Login from "../Auth/Login";
 import { JSX } from "react/jsx-runtime";
 import AdminMenu from "./AdminMenu";
 import Routing from "../Routing/Routing";
+import NavBar from "./NavBar";
 
 
 function Layout(): JSX.Element {
@@ -12,7 +13,7 @@ function Layout(): JSX.Element {
             </header>
             <div className='content'>
                 <menu>
-                    <AdminMenu />
+                    <NavBar />
                 </menu>
                 <main>
                   <Routing />
