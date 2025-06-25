@@ -31,7 +31,8 @@ public class Coupon {
     private double price;
     private String image;
 
-    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "coupon", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<CustomerCoupon> purchases;
 
     //no setter no builder default always

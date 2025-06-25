@@ -99,11 +99,6 @@ function AddNewCoupon(): JSX.Element {
             setError("");
             setSuccess("");
             
-            // Add debugging
-            console.log("=== Submitting Coupon ===");
-            console.log("Form data:", formData);
-            console.log("Selected category:", formData.category);
-            
             const authState = authStore.getState();
             if (!authState.user || !authState.token) {
                 setError("Please log in to continue");
@@ -125,6 +120,8 @@ function AddNewCoupon(): JSX.Element {
 
             let response;
             if (isEditMode && id) {
+                console.log("Updating coupon with ID:", id);
+                console.log("Full coupon data for update:", JSON.stringify(couponData, null, 2));
                 await companyService.updateCoupon(parseInt(id), couponData);
                 setSuccess("Coupon updated successfully!");
             } else {
@@ -144,8 +141,11 @@ function AddNewCoupon(): JSX.Element {
                 }
             }
             
-            // Clear success message after 3 seconds
-            setTimeout(() => setSuccess(""), 3000);
+            // Clear success message after 2 seconds
+            setTimeout(() => {
+                setSuccess("");
+                navigate('/show-all');
+            }, 2000);
         } catch (error) {
             console.error(`Error ${isEditMode ? 'updating' : 'adding'} coupon:`, error);
             setError(`Error ${isEditMode ? 'updating' : 'adding'} coupon. Please try again.`);
