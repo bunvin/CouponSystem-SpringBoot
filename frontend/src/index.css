@@ -392,6 +392,8 @@ code {
 /* Form Groups */
 .form-group {
     margin-bottom: 20px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .form-group label {

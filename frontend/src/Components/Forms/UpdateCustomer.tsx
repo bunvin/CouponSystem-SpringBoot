@@ -108,7 +108,7 @@ function UpdateCustomer(): JSX.Element {
                         )}
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group" >
                         <label htmlFor="customer-email">Email:</label>
                         <input
                             type="email"
@@ -124,9 +124,9 @@ function UpdateCustomer(): JSX.Element {
                         {customerForm.formState.errors.user?.email && (
                             <span className="error-message">{customerForm.formState.errors.user.email.message}</span>
                         )}
-                    </div>
+                    </div> 
 
-                    <div className="form-group">
+                    <div className="form-group" >
                         <label>
                             <input
                                 type="checkbox"
@@ -171,7 +171,7 @@ function UpdateCustomer(): JSX.Element {
                         value={ROLES.CUSTOMER}
                     />
 
-                    <div className="form-actions">
+                    <div className="form-actions" style={{ textAlign: 'center' }}>
                         <button 
                             type="button" 
                             onClick={() => navigate(-1)}

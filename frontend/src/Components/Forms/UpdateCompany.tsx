@@ -158,7 +158,7 @@ function UpdateCompany(): JSX.Element {
                         value={ROLES.COMPANY}
                     />
 
-                    <div className="form-actions">
+                    <div className="form-actions" style={{ textAlign: 'center' }}>
                         <button 
                             type="button" 
                             onClick={() => navigate(-1)}

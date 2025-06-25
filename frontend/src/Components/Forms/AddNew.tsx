@@ -114,10 +114,11 @@ function AddNew(): JSX.Element {
                         {...companyForm.register("user.userType")}
                         value={ROLES.COMPANY}
                     />
-
+                    <div style={{ textAlign: 'center' }}>
                     <button type="submit" disabled={companyForm.formState.isSubmitting}>
                         {companyForm.formState.isSubmitting ? "Adding Company..." : "Add Company"}
                     </button>
+                    </div>
                     
                     {companySuccess && (
                         <div className="success-message">{companySuccess}</div>
@@ -194,10 +195,11 @@ function AddNew(): JSX.Element {
                         {...customerForm.register("user.userType")}
                         value={ROLES.CUSTOMER} 
                     />
-
+                    <div style={{ textAlign: 'center' }}>
                     <button type="submit" disabled={customerForm.formState.isSubmitting}>
                         {customerForm.formState.isSubmitting ? "Adding Customer..." : "Add Customer"}
                     </button>
+                    </div>
                     
                     {customerSuccess && (
                         <div className="success-message">{customerSuccess}</div>

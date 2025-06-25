@@ -70,9 +70,9 @@ function Login(): JSX.Element {
           <span className="error-message">{formState.errors.userType.message}</span>
         )}
       </div>
-
-      <button>Login</button>
-
+      <div style={{ textAlign: 'center' }}>
+        <button>Login</button>
+      </div>
       <div className="demo-credentials">
         <p><strong>Credentials:</strong></p>
         <p>Admin - Email: admin@admin.com, Password: admin</p>

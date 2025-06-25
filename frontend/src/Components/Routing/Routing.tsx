@@ -7,7 +7,6 @@ import ShowAll from "../Layout/ShowAll";
 import UpdateCompany from "../Forms/UpdateCompany";
 import UpdateCustomer from "../Forms/UpdateCustomer";
 import AddNewCoupon from "../Forms/AddNewCoupon";
-import UpdateCoupon from "../Forms/UpdateCoupon";
 
 
 function Routing(): JSX.Element {
